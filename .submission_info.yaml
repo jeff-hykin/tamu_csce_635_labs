@@ -1,0 +1,13 @@
+hasInvitedTaCollaborator: true
+associatedNameAndRepo: true
+lab1:
+  week1:
+    checklist:
+      I got Linux (or docker or whatever) running: true
+      I got rviz running: true
+      I got the robot to move on rviz (e.g. test command): false
+      I can use change the face's expressions on the camera website: false
+      I can demo the interactive python terminal: false
+      I can print a statement when audio is above a threshold: false
+      I made a curious/look-around behavior in rviz: false
+      I could display python messages on the camera website: false
