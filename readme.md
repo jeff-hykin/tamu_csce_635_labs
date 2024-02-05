@@ -17,10 +17,12 @@ Note: lots of these are in person. E.g. "Fri" means "Fri when I leave EABC" not 
 
 # What needs to be done?
 
-### 1. Make your own github repo
+### 1. Use this github repo as a template
 
+- If already used the survivor_buddy template
+    - Still follow the instructions here (use this template). Sorry for making you create two repos, but all the setup steps are the same. So if you already followed the setup, then creating the new repo and cloning it is basically all you need to do.
 - Click the green "Use Template" button in the top-right-ish of the github page (probably the page you're on)
-- MAKE IT PRIVATE 
+- MAKE YOURS PRIVATE 
     - [tutorial](https://stackoverflow.com/questions/57836411/how-can-i-switch-a-public-repo-to-private-and-vice-versa-on-github)
     - You can get Github Pro for free using your university email, and Github Pro lets you make private repos for free.
     - <img width="1404" alt="Screen Shot 2023-01-31 at 1 55 32 PM" src="https://user-images.githubusercontent.com/17692058/215868334-ee175ad5-9835-435f-ace0-846f2d3564d3.png">
