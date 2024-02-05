@@ -11,4 +11,4 @@ This is a repo/template for the lab assignments.
         - You can get Github Pro for free using your university email, and Github Pro lets you make private repos for free.
     3. Copy down the url of your repo for a later step (ex: my url is https://github.com/jeff-hykin/tamu_csce_635_labs.git)
 
-- Then follow the readme instructions for each lab
+- Above this readme is a folder for each lab. Click the folder and see the readme inside for instructions.
