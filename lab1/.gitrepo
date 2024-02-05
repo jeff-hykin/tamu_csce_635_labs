@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:jeff-hykin/survivor_buddy.git
 	branch = master
-	commit = d1a02ad36f8e8aae97fe7a461601869dcdf58c4c
-	parent = a00cb15cb47a37caf98a990adb59a4445bf03680
+	commit = 4004edac66a5a92f4ad655849c6c0d4649628c18
+	parent = b9ec82bf2f9a82fbe7c7513521928fea07e246ee
 	method = merge
 	cmdver = 0.4.5
