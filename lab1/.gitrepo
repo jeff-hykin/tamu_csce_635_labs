@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:jeff-hykin/survivor_buddy.git
+	branch = master
+	commit = d1a02ad36f8e8aae97fe7a461601869dcdf58c4c
+	parent = a00cb15cb47a37caf98a990adb59a4445bf03680
+	method = merge
+	cmdver = 0.4.5

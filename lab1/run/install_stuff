@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+# 
+# base installation
+# 
+    # 
+    # install deno
+    #
+    # if curl  doesnt exist
+    if [ -z "$(command -v "curl ")" ]
+    then
+        sudo apt-get update && \
+        sudo apt-get install -y curl 
+    fi
+    # if deno doesnt exist
+    if [ -z "$(command -v "deno")" ]
+    then
+        curl -fsSL https://deno.land/x/install/install.sh | sh
+        export PATH="$HOME/.deno/bin:$PATH"
+    fi
+    # if archy doesnt exist
+    if [ -z "$(command -v "archy")" ]
+    then
+        # archy
+        deno install -n archy -A https://deno.land/x/archaeopteryx/mod.ts # version 1.0.7
+    fi
+
+    echo "disabling firewall"
+    sudo ufw disable
+
+    # 
+    # install ROS and Moveit
+    # 
+    ./run/ros_install_noetic.sh <<< '2
+    '
+    sudo apt-get update && \
+    sudo apt-get install -y \
+        python3-pip \
+        ros-noetic-rosbridge-suite \
+        python3-rosdep \
+        ros-noetic-moveit \
+        ros-noetic-moveit-commander \
+        ros-noetic-rosserial
+# 
+# setup env vars
+# 
+    # check if file exists
+    if [ -f "/opt/ros/noetic/setup.bash" ]
+    then
+        cd /opt/ros/noetic/
+        source /opt/ros/noetic/setup.bash
+        cd - 1>/dev/null
+    else
+        echo note: "/opt/ros/noetic/setup.bash"
+    fi
+
+    if [ -d "$catkin_dir/devel" ]
+    then
+        cd "$catkin_dir/devel"
+        source "./setup.bash"
+        cd - 1>/dev/null
+    fi
+
+    # fix missing libeigenpy.so
+    if [ -z "$LD_LIBRARY_PATH" ]
+    then
+        export LD_LIBRARY_PATH="/opt/ros/noetic/lib/x86_64-linux-gnu/:/opt/ros/noetic/lib/"
+    else
+        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/ros/noetic/lib/x86_64-linux-gnu/:/opt/ros/noetic/lib/"
+    fi
+# 
+# catkin make if needed
+# 
+if ! [ -n "$(command -v "catkin_make")" ]
+then
+    echo "looks like there was an issue with the install because I dont see a catkin_make command"
+else
+    export catkin_dir="./support/catkin_ws"
+    # if doesn't exist, make it
+    if ! [ -d "$catkin_dir/devel" ]
+    then
+        cd "$catkin_dir"
+        catkin_make
+        sudo rosdep init
+        rosdep update
+        
+        rosdep install --from-paths src --ignore-src -r -y
+        cd - 1>/dev/null
+    fi
+fi
+pip install blissful-basics==0.2.36
+pip install insightface==0.7.3
+pip install onnxruntime==1.16.3
