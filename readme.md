@@ -32,4 +32,4 @@ Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
 - Message me your repo URL on CampusWire and tell me your email. (Otherwise I won't know who the repo belongs to)
 
 #### 2. Copy the url of your repo for a later step (ex: my url is https://github.com/jeff-hykin/tamu_csce_635_labs.git)
-#### 3. Above this readme is a folder for each lab. Click the folder and see the `readme.md` inside for instructions.
+#### 3. See the `lab1` folder above this document, open it and follow the instructions in there for week1.
