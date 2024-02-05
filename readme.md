@@ -20,7 +20,7 @@ Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
 
 ### 1. Use this github repo as a template
 
-- If already used the survivor_buddy template
+- If you already used the survivor_buddy template
     - Still follow the instructions here (use this template). Sorry for making you create two repos, you can delete the other one. All the setup steps are the same, so if you already followed the install, then creating the new repo and cloning it is the only thing you need to do.
 - Click the green "Use Template" button in the top-right-ish of the github page (probably the page you're on)
 - MAKE YOUR REPO PRIVATE 
