@@ -13,8 +13,8 @@ This is a repo/template for the lab assignments.
         - <img width="1404" alt="Screen Shot 2023-01-31 at 1 55 32 PM" src="https://user-images.githubusercontent.com/17692058/215868334-ee175ad5-9835-435f-ace0-846f2d3564d3.png">
     3. Go to settings, Collaborators, Add people, and add `jeff-hykin`
         - <img width="1186" alt="Screen Shot 2023-01-31 at 1 57 38 PM" src="https://user-images.githubusercontent.com/17692058/215868976-9207346a-973e-43d4-8b39-6c60b0be2611.png">
-    4. Copy down the url of your repo for a later step (ex: my url is https://github.com/jeff-hykin/tamu_csce_635_labs.git)
-    
+
+- Copy the url of your repo for a later step (ex: my url is https://github.com/jeff-hykin/tamu_csce_635_labs.git)
 - Above this readme is a folder for each lab. Click the folder and see the readme inside for instructions.
 
 # Due when?
