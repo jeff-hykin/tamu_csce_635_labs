@@ -9,8 +9,9 @@ Note: lots of these are in person. E.g. "Fri" means "Fri when I leave EABC" not 
 - lab 1:
     - week 1: Fri Feb 9
     - week 2: Fri Feb 16
-    - week 3: Fri Feb 23
-    - week 4: Fri March 1st
+    - (skip a week for Test)
+    - week 3: Fri March 1st
+    - week 4: Fri March 8st
 
 - lab 2:
     - (pending)
