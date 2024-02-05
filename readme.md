@@ -2,6 +2,18 @@
 
 This is a repo/template for the lab assignments.
 
+# Due when?
+
+Note: lots of these are in person. E.g. "Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
+
+- lab 1:
+    - week 1: Fri Feb 9
+    - week 2: Fri Feb 16
+    - week 3: Fri Feb 23
+    - week 4: Fri March 1st
+
+- lab 2:
+    - (pending)
 
 # What needs to be done?
 
@@ -18,16 +30,3 @@ This is a repo/template for the lab assignments.
 
 #### 2. Copy the url of your repo for a later step (ex: my url is https://github.com/jeff-hykin/tamu_csce_635_labs.git)
 #### 3. Above this readme is a folder for each lab. Click the folder and see the `readme.md` inside for instructions.
-
-# Due when?
-
-Note: lots of these are in person. E.g. "Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
-
-- lab 1:
-    - week 1: Fri Feb 9
-    - week 2: Fri Feb 16
-    - week 3: Fri Feb 23
-    - week 4: Fri March 1st
-
-- lab 2:
-    - (pending)
