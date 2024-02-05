@@ -23,7 +23,7 @@ Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
 - If already used the survivor_buddy template
     - Still follow the instructions here (use this template). Sorry for making you create two repos, you can delete the other one. All the setup steps are the same, so if you already followed the install, then creating the new repo and cloning it is the only thing you need to do.
 - Click the green "Use Template" button in the top-right-ish of the github page (probably the page you're on)
-- MAKE YOURS PRIVATE 
+- MAKE YOUR REPO PRIVATE 
     - [tutorial](https://stackoverflow.com/questions/57836411/how-can-i-switch-a-public-repo-to-private-and-vice-versa-on-github)
     - You can get Github Pro for free using your university email, and Github Pro lets you make private repos for free.
     - <img width="1404" alt="Screen Shot 2023-01-31 at 1 55 32 PM" src="https://user-images.githubusercontent.com/17692058/215868334-ee175ad5-9835-435f-ace0-846f2d3564d3.png">
