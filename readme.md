@@ -4,7 +4,7 @@ This is a repo/template for the lab assignments.
 
 # Due when?
 
-Note: lots of these are in person. E.g. "Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
+Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
 
 - lab 1:
     - week 1: Fri Feb 9
