@@ -1,21 +1,3 @@
-# What is this?
-
-This is a repo/template for the lab assignments.
-
-# Due when?
-
-Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
-
-- lab 1:
-    - week 1: Fri Feb 9
-    - week 2: Fri Feb 16
-    - (skip a week for Test)
-    - week 3: Fri March 1st
-    - week 4: Fri March 8st
-
-- lab 2:
-    - (pending)
-
 # What needs to be done?
 
 ### 1. Use this github repo as a template
@@ -33,3 +15,19 @@ Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
 
 #### 2. Copy the url of your repo for a later step (ex: my url is https://github.com/jeff-hykin/tamu_csce_635_labs.git)
 #### 3. See the `lab1` folder above this document, open it and follow the instructions in there for week1.
+
+
+# Due when?
+
+Note: "due Fri" means "Fri when I leave EABC" not "Fri at 11:59pm"
+
+- lab 1:
+    - week 1: Fri Feb 9
+    - week 2: Fri Feb 16
+    - (skip a week for Test)
+    - week 3: Fri March 1st
+    - week 4: Fri March 8st
+
+- lab 2:
+    - (pending)
+
