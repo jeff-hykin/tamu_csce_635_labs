@@ -1,2 +1,18 @@
 #!/usr/bin/env bash
-sudo snap install --classic code 
+sudo snap install --classic code
+code --install-extension  ms-vscode-remote.remote-ssh
+code --install-extension  ms-vscode-remote.remote-ssh-edit
+code --install-extension  ms-vscode.remote-explorer
+code --install-extension  eamodio.gitlens
+code --install-extension  alefragnani.project-manager
+code --install-extension  ziyasal.vscode-open-in-github
+code --install-extension  tomoki1207.pdf
+code --install-extension  codezombiech.gitignore
+code --install-extension  ue.alphabetical-sorter
+code --install-extension  dline.CobaltNext
+code --install-extension  Equinusocio.vsc-material-theme
+code --install-extension  equinusocio.vsc-material-theme-icons
+code --install-extension  enkia.tokyo-night
+code --install-extension  thang-nm.catppuccin-perfect-icons
+code --install-extension  neptunedesign.vs-sequential-number
+code --install-extension  sidneys1.gitconfig
