@@ -5,7 +5,7 @@ import { Console, clearAnsiStylesFrom, black, white, red, green, blue, yellow, c
 
 import * as yaml from "https://deno.land/std@0.168.0/encoding/yaml.ts"
 
-const projectRoot = FileSystem.makeAbsolutePath(await FileSystem.walkUpUntil("deno.lock", { start: FileSystem.thisFolder }))
+const projectRoot = FileSystem.makeAbsolutePath(await FileSystem.walkUpUntil("deno.lock", FileSystem.thisFolder))
 const settingsPath = `${projectRoot}/settings.yaml`
 const certFile = FileSystem.makeAbsolutePath(`${projectRoot}/support/cert.pem`)
 const keyFile = FileSystem.makeAbsolutePath(`${projectRoot}/support/key.pem`)
