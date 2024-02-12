@@ -94,4 +94,4 @@ In person by Fri Feb 9
         - Use the `Robot.move_towards_positions` inside of main.py. 
     - Log a face communication message (demo of knowing communication through ROS)
         - Read the main.py and see if you can find how to send a message to the camera server when loud audio is detected
-        - On the camera server, find the `showOnWebpage` and change it so that your message from python will show up 
+        - On the camera server, find the `showOnWebpage` in the `main.js` and change it so that your message from python will show up 
