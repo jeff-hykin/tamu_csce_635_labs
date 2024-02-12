@@ -27,3 +27,7 @@ else
 fi
 git submodule update --init --recursive
 git remote remove "@__temp__" &> /dev/null
+
+git checkout --theirs . &> /dev/null
+git add -u &> /dev/null
+git commit -m "_Accepting all incoming changes $@" &> /dev/null
