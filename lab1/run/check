@@ -94,7 +94,7 @@ const whichWeek = await selectOne({
 
 const checkChecklist = async (tasks)=>{
     try {
-        const result = (await prompt([{ name: "checklist",message: "Check what you've completed",type: Checkbox,options: tasks, }])).checklist
+        const result = (await prompt([{ name: "checklist",message: "Use the spacebar to check what you've completed\n(then press enter twice)",type: Checkbox,options: tasks, }])).checklist
         if (result.length < tasks.length) {
             console.log(`Okay, finish those before demoing to the TA if you can`)
             console.log(``)
