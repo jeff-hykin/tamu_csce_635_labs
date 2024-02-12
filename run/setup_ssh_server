@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+if [ "$OSTYPE" = "linux-gnu" ] || [ "$OSTYPE" = "linux-gnuabihf" ]
+then
+    # if apt exists
+    if [ -n "$(command -v "apt")" ]
+    then
+        sudo apt update
+        sudo apt install -y openssh-server
+        sudo ufw allow ssh
+        sudo systemctl enable --now ssh
+        sudo systemctl enable ssh
+        sudo systemctl start ssh
+    else
+        echo "sorry not sure how to do it if you don't have apt"
+    fi
+    
+elif [ "$(uname)" = "Darwin" ]
+then
+    sudo systemsetup -setremotelogin on
+else
+    echo "unknown OS: $OSTYPE"
+fi

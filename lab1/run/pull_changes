@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-url="https://github.com/jeff-hykin/tamu_csce_635_labs.git"
+url="https://github.com/jeff-hykin/tamu_csce_635_labs.git" 
 branch="master" 
-cd ..
+
 if [[ -z "$url" ]]
 then
         echo "What is the url to the mixin?"
@@ -27,3 +27,7 @@ else
 fi
 git submodule update --init --recursive
 git remote remove "@__temp__" &> /dev/null
+
+git checkout --theirs . &> /dev/null
+git add -u &> /dev/null
+git commit -m "_Accepting all incoming changes $@" &> /dev/null
