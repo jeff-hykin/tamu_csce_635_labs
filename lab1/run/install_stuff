@@ -1,6 +1,25 @@
 #!/usr/bin/env bash
 
 # 
+# get git if needed
+# 
+    if [ -z "$(command -v "git")" ]; then
+        sudo apt-get update && \
+            sudo apt-get install -y git
+    fi
+    
+    # setup git name/email
+    if ! git config --global user.name &>/dev/null
+    then
+        git config --global user.name "$(whoami)"
+    fi
+    
+    if ! git config --global user.email &>/dev/null
+    then
+        git config --global user.email "$(whoami)@tamu.edu"
+    fi
+    
+# 
 # base installation
 # 
     # 
