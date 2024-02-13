@@ -13,6 +13,7 @@ In person by Fri Feb 16, 1:50pm (or earlier)
     - shows the code structure
     - demo **all** of the behaviors in Rviz
 
+
 ## Tasks
 
 - Create clap detection
