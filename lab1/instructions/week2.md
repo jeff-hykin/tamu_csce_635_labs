@@ -7,8 +7,8 @@ In person by Fri Feb 16, 1:50pm (or earlier)
 ## What needs to be done
 
 - Run the `run/check` command (Select week 2, and do all the checkbox items)
-- Be ready to demonstrate the code, or any of the behaviors (below) on rviz
 - Be ready to explain code / code structure (parameters / schema's)
+- Be ready to demonstrate any of the behaviors (below) on rviz
 - Alternatively, submit a screen recording that
     - shows the code structure
     - demo **all** of the behaviors in Rviz
