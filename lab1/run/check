@@ -79,6 +79,18 @@ if (!storageObject.associatedNameAndRepo) {
     console.log(``)
 }
 
+// 
+// ensure git is setup
+// 
+if (!storageObject.gitIsConfigured) {
+    const username = (await run`whoami ${Stdout(returnAsString)}`).trim()
+    if (!(await run`git config --global user.email`.success)) {
+        await run`git config --global user.name ${username}`
+        await run`git config --global user.email ${`${username}@tamu.edu`}`
+    }
+    storageObject.gitIsConfigured = true
+}
+
 const whichWeek = await selectOne({
     message: `Which week should we check?`,
     showList: true,
