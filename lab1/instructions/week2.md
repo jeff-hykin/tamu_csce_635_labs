@@ -29,3 +29,13 @@ In person by Fri Feb 16, 1:50pm (or earlier)
 - Create the following behavior:
     - Clapping should trigger the curious action
     - Have survivor buddy return to its original pose after `N` seconds in a naturalistic way (e.g. slowly)
+
+
+### Lab Late Policy
+- entirely late (more than 1 week) =  zero
+- partly late = additional work
+   - To get the first 50% of credit, you will need to record/upload/submit a video (instead of demoing in person)
+   - To get the second 50% of assignment credit (for a full 100%)
+     - help other students during study hall (+30min of help for each day late)
+     - demo the next assignment by Thursday morning (e.g. one day early)
+     - If you're busy during study hall, we can schedule another time to help
