@@ -8,7 +8,7 @@ In person by Fri Feb 16, 1:50pm (or earlier)
 
 - Run the `run/check` command (Select week 2, and do all the checkbox items)
 - Be ready to demonstrate the code, or any of the behaviors (below) on rviz
-- Be ready to show code / code structure (parameters / schema's)
+- Be ready to explain code / code structure (parameters / schema's)
 - Alternatively, submit a screen recording that
     - shows the code structure
     - demo **all** of the behaviors in Rviz
@@ -23,6 +23,7 @@ In person by Fri Feb 16, 1:50pm (or earlier)
     - Even if your code is decent, its probably to be finnicky. You just need a ~60% success rate
 - Create a code structure(s) that follows the behavioral schema
     - E.g. behavioral schema class that takes parameters as an input (ex: constructor arguments)
+         - If you're not familiar with object oriented programming, watch programming (not conceptual) YouTube videos about it
     - Create a perception schema that includes clapping
     - Create a motor schema for the curious action
 - Create the following behavior:
