@@ -26,4 +26,4 @@ In person by Fri Feb 16, 1:50pm (or earlier)
     - Create a motor schema for the curious action
 - Create the following behavior:
     - Clapping should trigger the curious action
-    - Have survivor buddy return to its original pose after `N` seconds in a naturalistic way
+    - Have survivor buddy return to its original pose after `N` seconds in a naturalistic way (e.g. slowly)
