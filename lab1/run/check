@@ -84,7 +84,7 @@ if (!storageObject.associatedNameAndRepo) {
 // 
 if (!storageObject.gitIsConfigured) {
     const username = (await run`whoami ${Stdout(returnAsString)}`).trim()
-    if (!(await run`git config --global user.email ${Stdout(null)}`.success)) {
+    if (!(await run`git config --global user.email`.success)) {
         await run`git config --global user.name ${username}`
         await run`git config --global user.email ${`${username}@tamu.edu`}`
     }
