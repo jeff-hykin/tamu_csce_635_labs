@@ -2,6 +2,20 @@
 url="https://github.com/jeff-hykin/tamu_csce_635_labs.git" 
 branch="master" 
 
+# default to nano/pico if no git editor is set
+if [ -z "$GIT_EDITOR" ]
+then
+    if [ -n "$(command -v "nano")" ]
+    then
+        export GIT_EDITOR=nano
+    else
+        if [ -n "$(command -v "pico")" ]
+        then
+            export GIT_EDITOR=pico
+        fi
+    fi
+fi
+
 if [[ -z "$url" ]]
 then
         echo "What is the url to the mixin?"
@@ -27,7 +41,3 @@ else
 fi
 git submodule update --init --recursive
 git remote remove "@__temp__" &> /dev/null
-
-git checkout --theirs . &> /dev/null
-git add -u &> /dev/null
-git commit -m "_Accepting all incoming changes $@" &> /dev/null
