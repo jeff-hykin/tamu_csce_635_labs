@@ -1,0 +1,27 @@
+current_branch_name="$(git rev-parse --abbrev-ref HEAD)"
+# get the latest
+git fetch --all
+
+# 
+# delete changes
+# 
+    # reset all the submodules
+    git submodule foreach --recursive 'git stash save --keep-index --include-untracked'
+    git submodule foreach --recursive 'git reset --hard'
+    git submodule update --init --recursive # https://stackoverflow.com/questions/7882603/how-to-revert-a-git-submodule-pointer-to-the-commit-stored-in-the-containing-rep
+    # unstage everything
+    git reset --
+    __temp_var__result="$(git stash save --keep-index --include-untracked)"
+
+    # stash everything and delete stash
+    if [[ "$__temp_var__result" == "No local changes to save" ]] 
+    then
+        echo "no changes to delete (just FYI)"
+    else
+        git stash drop
+    fi
+    unset __temp_var__result
+
+
+# reset to match origin
+git reset --hard "origin/$current_branch_name"

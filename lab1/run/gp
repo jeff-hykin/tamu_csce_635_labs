@@ -1,0 +1,7 @@
+args="$@"
+if [[ "$args" = "" ]]; then
+    args="-"
+fi
+export GIT_EDITOR=nano
+# https://stackoverflow.com/questions/3745135/push-git-commits-tags-simultaneously
+git add -A; git commit -m "$args"; git pull --no-edit; git submodule update --init --recursive --progress && git push

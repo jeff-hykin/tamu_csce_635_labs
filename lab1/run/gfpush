@@ -1,0 +1,2 @@
+args="$@"
+git push origin $args --force
