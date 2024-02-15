@@ -14,7 +14,7 @@ import { mergeUnrelated, gitUrl } from "../support/js_tools/git_stuff.js"
 import { project } from "../support/js_tools/project.js"
 import { createStorageObject } from "https://deno.land/x/storage_object@0.0.3.5/deno.js"
 import { capitalize, indent, toCamelCase, digitsToEnglishArray, toPascalCase, toKebabCase, toSnakeCase, toScreamingtoKebabCase, toScreamingtoSnakeCase, toRepresentation, toString, regex, findAll, iterativelyFindAll, escapeRegexMatch, escapeRegexReplace, extractFirst, isValidIdentifier, removeCommonPrefix, didYouMean } from "https://deno.land/x/good@1.6.0.0/string.js"
-const builtinPrompt = prompt
+const builtinPrompt = globalThis.prompt
 import {Checkbox,  Confirm,  Input, prompt } from "../support/js_tools/generic/input_tools.js"
 
 const { projectRoot, settingsPath, certFile, keyFile, catkinFolder, serverFolder, websiteEntrypoint, rbServerPath } = project
@@ -179,7 +179,7 @@ if (whichWeek == "week 1: Learning the ropes") {
                     const url = builtinPrompt(`what's the URL to the video?`)
                     try {
                         new URL(url)
-                        storageObject.lab1 = { ...storageObject?.lab1, week1: { done: true, videoUrl: url, date: `${new Date()}` } }
+                        storageObject.lab1 = { ...storageObject?.lab1, week1: { ...storageObject?.lab1?.week1, done: true, videoUrl: url, date: `${new Date()}` } }
                         break
                     } catch (error) {
                         console.log(``)
@@ -326,7 +326,8 @@ if (whichWeek.startsWith("week 4:")) {
         "If a face disappears from center view, survivor buddy acts curious",
     ]
     const result = await checkChecklist(tasks)
-    storageObject.lab1 = { ...storageObject?.lab1, week4: { done: null, date: null, ...storageObject?.lab1?.week4, checklist: Object.fromEntries(tasks.map(each=>[each, result.includes(each)])) } }
+    storageObject.lab1 = { ...storageObject?.lab1, week4: {  ...storageObject?.lab1?.week4, done: null, date: null, ...storageObject?.lab1?.week4, checklist: Object.fromEntries(tasks.map(each=>[each, result.includes(each)])) } }
+    console.debug(`storageObject.lab1 is:`,storageObject.lab1)
 
     console.log()
     console.log(` ${green`done   `}: Tasks`)
