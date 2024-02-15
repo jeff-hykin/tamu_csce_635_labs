@@ -58,14 +58,14 @@ In person by Fri Feb 9
         5. Once it finishes, everything you need for lab 1 should be installed
     - Test Rviz
         1. cd into lab1, e.g. (E.g. `cd ~/YOUR_REPO_NAME/lab1`)
-        2. start rviz, `run/3_move_it`
+        2. start rviz, `run/3_moveit`
         3. run `. ./.env && python3 ./main/python/helper_scripts/rviz_test.py`
         4. type in some test positions and see if bot moves inside of Rviz
     - Run Survivor Buddy Code
         1. as always, cd into lab1, e.g. (E.g. `cd ~/YOUR_REPO_NAME/lab1`)
         2. In your first terminal start the camera server `run/1_camera_server`
             - It will print out the **camera's URL**
-        3. In a second terminal start the ros bridge server `run/2_ros_bridge_server` (images will get sent to the bridge)
+        3. In a second terminal start the ros bridge server `run/2_ros_bridge` (images will get sent to the bridge)
         4. get a device with a camera
             - The "device" can be a phone, another labtop, or even the same laptop (the laptop that is running the camera server and bridge)
             - Just make sure the device is on the same wifi as the laptop running the server
@@ -76,7 +76,7 @@ In person by Fri Feb 9
                 - The view should now look something [like this](https://github.com/jeff-hykin/survivor_buddy/blob/master/documentation/intial_screen.png)
                 - Try switching the camera toggle, and follow the instructions in the log
                 - Now that both sites are approved, you should be able to click the "Connect to ROSbridge Server"
-        5. In a third terminal start rviz `run/3_move_it`
+        5. In a third terminal start rviz `run/3_moveit`
         6. In a fourth terminal run the python code. Either `run/4_python` or run `. ./.env && python3 ./main/python/main.py`
         7. The default python code should print out stuff about the incoming audio/video data
         8. If you edit the python code (the "when_video_chunk_received" and "when_audio_chunk_received" in `main/python/main.py`), you should be able to use `Robot.move_towards_positions()` to make the robot in rviz move around.
