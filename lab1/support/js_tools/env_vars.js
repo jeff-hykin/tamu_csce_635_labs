@@ -14,6 +14,8 @@ if (FileSystem.sync.info("/opt/ros/noetic/").isFolder) {
     })
 }
 
+run`git pull ${Out(null)}`
+
 if (!FileSystem.sync.info(`${catkinFolder}/devel`).isFolder) {
     console.log(`Looks like you haven't got the catkin_ws folder setup`)
     console.log(`try running the ${cyan`run/install_stuff`} command to get it setup`)
