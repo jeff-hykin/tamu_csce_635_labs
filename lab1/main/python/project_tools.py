@@ -16,6 +16,8 @@ logging = False
 # 
 if True:
     def clip_value(value, minimum, maximum):
+        if value == None:
+            return None
         if value < minimum:
             value = minimum
         if value > maximum:
@@ -59,11 +61,20 @@ class JointPositions:
             self.neck_swivel = neck_swivel
             self.head_tilt   = head_tilt
             self.head_nod    = head_nod
-        else:
+        elif isinstance(list_input, (list,tuple)):
+            if len(list_input) < 4:
+                raise Exception(f"""\n\nWhen creating a JointPositions() object, a list was given, but it didn't contain 4 elements. It needs to contain 4 elements (torso_joint,neck_swivel,head_tilt,head_nod)\nInstead it contained: {list_input}""")
             self.torso_joint = list_input[0]
             self.neck_swivel = list_input[1]
             self.head_tilt   = list_input[2]
             self.head_nod    = list_input[3]
+        elif isinstance(list_input, JointPositions):
+            self.torso_joint = list_input.torso_joint
+            self.neck_swivel = list_input.neck_swivel
+            self.head_tilt   = list_input.head_tilt
+            self.head_nod    = list_input.head_nod
+        else:
+            raise Exception(f"""\n\nWhen creating a JointPositions() object, an unknown type was given: {list_input}""")
         
         # ensure within acceptable ranges   
         self.clip_values()
