@@ -38,6 +38,50 @@ if True:
         prev_time = now
         return output
 
+
+class Timer:
+    def __init__(self):
+        self.start_time = time.time()
+        self.prev_time = self.start_time
+    
+    @property
+    def time_since_start(self):
+        return time.time() - self.start_time
+    
+    @property
+    def time_since_prev(self):
+        now = time.time()
+        output = now - self.prev_time
+        self.prev_time = now
+        return output
+
+fake_noise_helper = Timer()
+fake_noise_helper.started = False
+fake_noise_helper.waiting_duration = 0
+fake_noise_helper.action_duration = 0
+def generate_fake_continous_loud_noise(delay=5, duration=5):
+    import numpy
+    if not fake_noise_helper.time_since_start > delay:
+        print(f'''faker: waiting on start delay''')
+    else:
+        is_first_time = not fake_noise_helper.started
+        fake_noise_helper.started = True
+        if is_first_time:
+            fake_noise_helper.action_duration = duration
+            fake_noise_helper.time_since_prev
+        else:
+            if fake_noise_helper.waiting_duration > 0:
+                print(f'''faker: sending no noise''')
+                fake_noise_helper.waiting_duration -= fake_noise_helper.time_since_prev
+                fake_noise_helper.action_duration = duration
+            # no longer waiting
+            else:
+                print(f'''faker: continuous noise''')
+                fake_noise_helper.action_duration -= fake_noise_helper.time_since_prev
+                if fake_noise_helper.action_duration < 0:
+                    fake_noise_helper.waiting_duration = duration
+                return numpy.ones(2048)
+    return numpy.zeros(2048)
 # 
 # joints
 # 
