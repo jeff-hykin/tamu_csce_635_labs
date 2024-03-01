@@ -20,7 +20,8 @@ In person by Fri March 1st
     1. fearful
         - involve the face expressions
     2. startled
-        - have an intensity parameter, higher intensity causes a stronger reaction
+        - no facial expression required
+        - have an intensity parameter for the rviz movement, higher intensity causes a stronger reaction
    
 - follow the behavioral schema again with the following characteristics
     - Have survivor buddy return to its original pose after time time of no sound stimulus
@@ -29,9 +30,9 @@ In person by Fri March 1st
     - Clapping when awake triggers curious
     - Clapping when asleep triggers startled (louder the clap, the greater the reaction)
 
-- (Pending) Deploy to the physical robot. Which you'll get help with, but heres the general steps
+<!-- - (Pending) Deploy to the physical robot. Which you'll get help with, but heres the general steps
     1. Plug in survivor_buddy's USB cable into your laptop
     2. Make sure it is being detected by running the command `ls /dev/ttyUSB*`, you should see /dev/ttyUSB0 as the output of the previous command.
     3. In a terminal run `run/5_ros_serial`
     4. To test that the microcontroller is receiving commands, in another terminal run `. ./.env && python ./main/python/helper_scripts/physical_test.py`
-    5. Now repeat the steps of running on rviz (4 terminals) BUT, this time when you run your python do:<br>`. ./.env && python ./main/python/main.py --send_to_rviz False`
+    5. Now repeat the steps of running on rviz (4 terminals) BUT, this time when you run your python do:<br>`. ./.env && python ./main/python/main.py --send_to_rviz False` -->
