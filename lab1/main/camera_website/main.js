@@ -466,6 +466,7 @@ import { fadeAfterNoInteraction } from "./helpers/opacity_helper.js" // this is 
 // 
     // (global variables so you can play with them in the browser console)
     window.face           = face
+    window.playSound      = playSound
     window.logMessage     = MessageLog.logMessage
     window.showToast      = showToast
     window.showErrorToast = showErrorToast
