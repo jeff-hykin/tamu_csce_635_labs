@@ -6,40 +6,50 @@ In person demo Fri March 8st
 
 ## What needs to be done
 
-- Demonstrate using the insight face API before Friday
-- Be ready to demonstrate any of behaviors on rviz
+- Demonstrate using a face API
+- Be ready to demonstrate behaviors on rviz
 - Get code running on the physical bot
 - Run the `run/check` command
 
 ## Tasks
 
 - Be able to use a face API
-    - You can use any API you want but the `insightface` should have been installed as part of the setup instructions
-    - I recommend having a dummy image file you can load (instead of trying to grab an image frame)
+    - You can use any API, but `insightface` should have been installed as part of the setup instructions
+    - I recommend testing with an image file first (before trying to use the images from `when_video_chunk_received`)
     - insightface doesn't have great documentation, so try searching github (all of github) for `from insightface.app import FaceAnalysis` to see examples
     - Show how to get the number of faces and the x,y coordinates of a face
 
 - Make a talking sound on the camera browser
-    - in the `main.js` file use `playSound("type sometthing", {pitch:1,}).then(()=>console.log("finished making a sound"))`
+    - in the `main.js` file, similar to how you can make face/eye expressions, you can also use `playSound("Howdy!", {pitch:1,}).then(()=>console.log("finished making a sound"))`
     
 - Create a "look at" behavior
     - If theres one or more faces visible, pick one and have survivor buddy look towards it
     - e.g. if the face moves to one side, survivor buddy should turn its head to keep looking at it
     - if the face moves up/down survivor buddy should angle its head to keep looking at it
 
-- Create the following behaviors (these are in order of precedence/priority, highest ones override later ones)
-    - Note: either remove old behaviors or make them "play nice" with the behaviors below. (Being more creative/advanced is fine)
+- Create the following behaviors:
+    - **Note1**: these are in order of precedence/priority. If two of them use the motors, then the one higher on the list should interrupt/override the one that is later on the list.
+    - **Note2**: if one behavior uses the face, and another uses the motors, don't make one interrupt the other
+    - **Note3**: either remove old week-3 behaviors or make them "play nice" with the behaviors below.
     - Loud noises (spike or continuous) cause the fearful behavior
         - e.g. interrupts any other rviz motion
     - No stimulus for some amount of time causes survivor buddy to go into a neutral state
     - Being in the neutral state, seeing a face, but the face being too close should cause the startled behavior
         - e.g. interrupts any other rviz motion
     - Seeing a face in a neutral state should trigger the happy face expression
-    - After the initial response (startled or happy), if one (or more) faces are still detected, survivor buddy do the "look at" behavior
+    - After the initial response (startled or happy), if one (or more) faces are still detected, have survivor buddy do the "look at" behavior
     - If a face gets too close, survivor buddy should lean back
-        - Its fine to use hacky ways of measuring distance
+        - Its fine to use hacky ways of measuring "too close"
     - If a face was in the middle of survivor buddy's view, then disappears, it should trigger the curious behavior
     - If there is a moderate level of noise for some period of time, survivor buddy should start talking (and should stop when/if the noise dies down)
+        - There is a helper function for testing this inside of project_tools.py (do `git pull;run/pull_changes`)
+        - e.g. do `from project_tools import generate_fake_continous_noise` then make this change:  
+        ```py
+        def when_audio_chunk_received(chunk):
+            data = numpy.array(chunk.data)
+            # add this:
+            data = generate_fake_continous_noise(delay=5, duration=4, noise_volume=0.4)
+        ```
 
 - Deploy behaviors to the physical robot
     1. Plug in survivor_buddy's USB cable into your laptop
