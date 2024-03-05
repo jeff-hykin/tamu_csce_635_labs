@@ -2,7 +2,7 @@
 
 ## Due when?
 
-In person demo Fri March 8st
+In person demo Fri March 8th
 
 ## What needs to be done
 
