@@ -19,7 +19,7 @@ In person demo Fri March 8th
     - insightface doesn't have great documentation, so try searching github (all of github) for `from insightface.app import FaceAnalysis` to see examples
     - Show how to get the number of faces and the x,y coordinates of a face
 
-- Make a talking sound on the camera browser
+- Make a talking sound
     - in the `main.js` file, similar to how you can make face/eye expressions, you can also use `playSound("Howdy!", {pitch:1,}).then(()=>console.log("finished making a sound"))`
     
 - Create a "look at" behavior
