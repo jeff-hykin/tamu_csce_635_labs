@@ -2,12 +2,7 @@
 
 ## Due when?
 
-Two due dates!
-- Some time before Friday
-    - demonstrate using the Face API
-    - demonstrate using `playSound()` in the main.js 
-    - It can be after class, in office hours, or in a screen recording 
-- Then the typical in person demo Fri March 8st
+In person demo Fri March 8st
 
 ## What needs to be done
 
@@ -35,11 +30,14 @@ Two due dates!
 - Create the following behaviors (these are in order of precedence/priority, highest ones override later ones)
     - Note: either remove old behaviors or make them "play nice" with the behaviors below. (Being more creative/advanced is fine)
     - Loud noises (spike or continuous) cause the fearful behavior
+        - e.g. interrupts any other rviz motion
     - No stimulus for some amount of time causes survivor buddy to go into a neutral state
     - Being in the neutral state, seeing a face, but the face being too close should cause the startled behavior
+        - e.g. interrupts any other rviz motion
     - Seeing a face in a neutral state should trigger the happy expression
-    - After the initial response, if one (or more) faces are still detected, survivor buddy do the "look at" behavior
+    - After the initial response (startled or happy), if one (or more) faces are still detected, survivor buddy do the "look at" behavior
     - If a face gets too close, survivor buddy should lean back
+        - Its fine to use hacky ways of measuring distance
     - If a face was in the middle of survivor buddy's view, then disappears, it should trigger the curious behavior
     - If there is a moderate level of noise for some period of time, survivor buddy should start talking (and should stop when/if the noise dies down)
 
