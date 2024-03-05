@@ -42,7 +42,8 @@ In person demo Fri March 8th
     - If a face was in the middle of survivor buddy's view, then disappears, it should trigger the curious behavior
     - If there is a moderate level of noise for some period of time, survivor buddy should start talking (and should stop when/if the noise dies down)
         - There is a helper function for testing this inside of project_tools.py (do `git pull;run/pull_changes`)
-        - e.g. do `from project_tools import generate_fake_continous_noise` then make this change:  
+        - in `main.py` find the `from project_tools` then below it add `from project_tools import generate_fake_continous_noise` 
+        - then make this change:  
         ```py
         def when_audio_chunk_received(chunk):
             data = numpy.array(chunk.data)
