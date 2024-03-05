@@ -41,7 +41,7 @@
     if [ -z "$(command -v "archy")" ]
     then
         # archy
-        deno install -n archy -A https://deno.land/x/archaeopteryx/mod.ts # version 1.0.7
+        deno install -n archy -Af https://deno.land/x/archaeopteryx/mod.ts # version 1.0.8
     fi
 
     echo "disabling firewall"

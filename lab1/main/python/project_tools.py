@@ -38,11 +38,15 @@ if True:
         prev_time = now
         return output
 
-
+import time
 class Timer:
+    """
+    Note: this is hacky, just for faking noise, probably dont use it
+    """
     def __init__(self):
         self.start_time = time.time()
         self.prev_time = self.start_time
+        self.timer_start = None
     
     @property
     def time_since_start(self):
@@ -54,34 +58,76 @@ class Timer:
         output = now - self.prev_time
         self.prev_time = now
         return output
+    
+    def start_timer(self, amount):
+        self.timer_start = time.time()
+        self.timer_amount = amount
+    
+    def check_timer(self):
+        if self.timer_start == None:
+            return None
+        now = time.time()
+        if now - self.timer_start > self.timer_amount:
+            return True
+        else:
+            return False
+
 
 fake_noise_helper = Timer()
 fake_noise_helper.started = False
 fake_noise_helper.waiting_duration = 0
 fake_noise_helper.action_duration = 0
-def generate_fake_continous_loud_noise(delay=5, duration=5):
+fake_noise_helper.just_sent_clap = False
+fake_noise_helper.prev_mode = None
+audio_chunk_size = 2048
+def generate_fake_continous_noise(delay=5, duration=4, noise_volume=1, spike_index=124, should_clap=False, interrupt_after_clap_lag=0.5):
+    """
+        generate_fake_continous_noise(
+            delay=5, # means startup delay of 5 seconds
+            duration=5 # means 5sec of silence followed by 5 seconds of continuous noise
+            noise_volume=1, # means the values in the array will be 1
+        )
+    """
     import numpy
+    output = numpy.zeros(audio_chunk_size)
+    assert interrupt_after_clap_lag < duration/2, "The interrupt needs to be within the duration of the clap"
+    mode = None
     if not fake_noise_helper.time_since_start > delay:
         print(f'''faker: waiting on start delay''')
     else:
-        is_first_time = not fake_noise_helper.started
         fake_noise_helper.started = True
-        if is_first_time:
-            fake_noise_helper.action_duration = duration
-            fake_noise_helper.time_since_prev
+        if should_clap:
+            mode = int((int(time.time()) / duration) % 3) # 3=noise,silence,clap
         else:
-            if fake_noise_helper.waiting_duration > 0:
-                print(f'''faker: sending no noise''')
-                fake_noise_helper.waiting_duration -= fake_noise_helper.time_since_prev
-                fake_noise_helper.action_duration = duration
-            # no longer waiting
+            mode = int((int(time.time()) / duration) % 2) # 2=noise,silence
+        
+        if mode == 0:
+            print(f'''faker: continuous noise''')
+            fake_noise_helper.just_sent_clap = False
+        elif mode == 1:
+            print(f'''faker: sending no noise''')
+            fake_noise_helper.just_sent_clap = False
+            output = numpy.ones(audio_chunk_size)
+        elif mode == 2:
+            if fake_noise_helper.just_sent_clap:
+                if fake_noise_helper.check_timer():
+                    print(f'''faker: after clap: interrupt ''')
+                    output = numpy.ones(audio_chunk_size)
+                else:
+                    print(f'''faker: after clap: lag time''')
+            elif fake_noise_helper.just_sent_clap == None:
+                print(f'''faker: after interrupt ()''')
             else:
-                print(f'''faker: continuous noise''')
-                fake_noise_helper.action_duration -= fake_noise_helper.time_since_prev
-                if fake_noise_helper.action_duration < 0:
-                    fake_noise_helper.waiting_duration = duration
-                return numpy.ones(2048)
-    return numpy.zeros(2048)
+                print(f'''faker: sending clap''')
+                fake_noise_helper.just_sent_clap = True
+                fake_noise_helper.start_timer(interrupt_after_clap_lag)
+                
+                output = numpy.zeros(audio_chunk_size)
+                output[spike_index] = noise_volume # one giant spike
+    
+    fake_noise_helper.prev_mode = None
+    return numpy.zeros(audio_chunk_size)
+
 # 
 # joints
 # 
