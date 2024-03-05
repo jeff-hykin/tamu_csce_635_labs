@@ -45,9 +45,9 @@ In person demo Fri March 8th
         - in `main.py` find the `from project_tools` then below it add `from project_tools import generate_fake_continous_noise` 
         - then make this change:  
         ```py
-        def when_audio_chunk_received(chunk):
+        def when_audio_chunk_received(chunk): # <- find this 
             data = numpy.array(chunk.data)
-            # add this:
+            # add this line:
             data = generate_fake_continous_noise(delay=5, duration=4, noise_volume=0.4)
         ```
 
