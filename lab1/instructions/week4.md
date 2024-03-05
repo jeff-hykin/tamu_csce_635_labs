@@ -34,7 +34,7 @@ In person demo Fri March 8st
     - No stimulus for some amount of time causes survivor buddy to go into a neutral state
     - Being in the neutral state, seeing a face, but the face being too close should cause the startled behavior
         - e.g. interrupts any other rviz motion
-    - Seeing a face in a neutral state should trigger the happy expression
+    - Seeing a face in a neutral state should trigger the happy face expression
     - After the initial response (startled or happy), if one (or more) faces are still detected, survivor buddy do the "look at" behavior
     - If a face gets too close, survivor buddy should lean back
         - Its fine to use hacky ways of measuring distance
