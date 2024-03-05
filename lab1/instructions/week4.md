@@ -49,7 +49,7 @@ In person demo Fri March 8th
             data = numpy.array(chunk.data)
             # add this line:
             data = generate_fake_continous_noise(delay=5, duration=4, noise_volume=0.4)
-            # it will now alternate every 5 seconds between silence and noise that has a constant volume of 0.4
+            # it will now alternate every 4 seconds between silence and noise that has a constant volume of 0.4
         ```
 
 - Deploy behaviors to the physical robot
