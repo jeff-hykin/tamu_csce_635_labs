@@ -29,7 +29,7 @@ In person demo Fri March 8th
 
 - Create the following behaviors:
     - **Note1**: these are in order of precedence/priority. If two of them use the motors, then the one higher on the list should interrupt/override the one that is later on the list.
-    - **Note2**: if one behavior uses the face, and another uses the motors, don't make one interrupt the other
+    - **Note2**: if one behavior uses the face, and another uses the motors, don't require that one interrupts the other.
     - **Note3**: either remove old (week3) behaviors or make them "play nice" with the behaviors below.
     - Loud noises (spike or continuous) cause the fearful behavior
         - e.g. interrupts any other rviz motion
