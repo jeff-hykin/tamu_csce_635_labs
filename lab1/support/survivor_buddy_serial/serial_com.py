@@ -6,7 +6,7 @@ import serial
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-ser = serial.Serial('COM4', 57600)
+ser = serial.Serial("COM4", 57600)
 # time.sleep(5)
 
 # Analog to the arduino map function, maps a value from one range to another
@@ -17,7 +17,7 @@ def map_range(value, low1, high1, low2, high2):
 
 
 def tripleDigitInttoString(num):
-    return f"{num}".rjust(3,"0")
+    return f"{num}".rjust(3, "0")
 
 
 def process_running_average(running_vals: list, new_val: int):
@@ -32,7 +32,8 @@ mp_face_mesh = mp.solutions.face_mesh
 
 # setting face mesh detection parameters
 face_mesh = mp_face_mesh.FaceMesh(
-    min_detection_confidence=0.5, min_tracking_confidence=0.5)
+    min_detection_confidence=0.5, min_tracking_confidence=0.5
+)
 
 # useful for visualizing landmarks later on
 mp_drawing = mp.solutions.drawing_utils
@@ -50,10 +51,10 @@ headRotationRunning: list[int] = []
 headTiltRunning: list[int] = []
 torsoRotRunning: list[int] = []
 
-ser.write(b'1')
+ser.write(b"1")
 while cap.isOpened():
     print("Camera was opened.")
-    if (ser.in_waiting > 0):
+    if ser.in_waiting > 0:
         print(ser.readline())
     #     # pass
     sucess, image = cap.read()
@@ -110,18 +111,19 @@ while cap.isOpened():
         mouth_3d = np.array(mouth_3d, dtype=np.float64)
 
         # The camera matrix
-        focal_length = 1*img_w
+        focal_length = 1 * img_w
 
-        cam_matrix = np.array([[focal_length, 0, img_h/2],
-                              [0, focal_length, img_w/2],
-                              [0, 0, 1]])
+        cam_matrix = np.array(
+            [[focal_length, 0, img_h / 2], [0, focal_length, img_w / 2], [0, 0, 1]]
+        )
 
         # The distortion parameters
         dist_matrix = np.zeros((4, 1), dtype=np.float64)
 
         # Solve PnP
         success, rot_vec, trans_vec = cv2.solvePnP(
-            face_3d, face_2d, cam_matrix, dist_matrix)
+            face_3d, face_2d, cam_matrix, dist_matrix
+        )
 
         # Get rotational matrix
         rmat, jac = cv2.Rodrigues(rot_vec)
@@ -130,9 +132,9 @@ while cap.isOpened():
         angles, mtxR, mtxQ, Qx, Qy, Qz = cv2.RQDecomp3x3(rmat)
 
         # Get the y rotation degrees
-        if (starting_x == 0):
+        if starting_x == 0:
             starting_x = angles[0] * 360
-        if (starting_y == 0):
+        if starting_y == 0:
             starting_y = angles[1] * 360
 
         x = (angles[0] * 360) - starting_x
@@ -153,16 +155,18 @@ while cap.isOpened():
 
         # Display the nose direction and mouth direction
         nose_3d_projection, jacobian = cv2.projectPoints(
-            nose_3d, rot_vec, trans_vec, cam_matrix, dist_matrix)
+            nose_3d, rot_vec, trans_vec, cam_matrix, dist_matrix
+        )
         mouth_3d_projection, jacobian = cv2.projectPoints(
-            mouth_3d, rot_vec, trans_vec, cam_matrix, dist_matrix)
+            mouth_3d, rot_vec, trans_vec, cam_matrix, dist_matrix
+        )
 
         p1 = (int(nose_2d[0]), int(nose_2d[1]))
-        p2 = (int(nose_2d[0] + y*10), int(nose_2d[1] - x * 10))
+        p2 = (int(nose_2d[0] + y * 10), int(nose_2d[1] - x * 10))
 
         # Draw line going outwards from mouth
         m1 = (int(mouth_2d[0]), int(mouth_2d[1]))
-        m2 = (int(mouth_2d[0] + y*10), int(mouth_2d[1] - x * 10))
+        m2 = (int(mouth_2d[0] + y * 10), int(mouth_2d[1] - x * 10))
 
         # Get points from nose to mouth for head rotation calculation
         nose2Mouth1 = (int(nose_2d[0]), int(nose_2d[1]))
@@ -170,23 +174,30 @@ while cap.isOpened():
 
         # Actually calculate and map the rotation angles sent to Arduino
         # Once calculated and mapped, take running average to smooth data
-        headRotationAngle = int(np.arctan2(
-            nose2Mouth2[1] - nose2Mouth1[1], nose2Mouth2[0] - nose2Mouth1[0]) * 180 / np.pi)
+        headRotationAngle = int(
+            np.arctan2(nose2Mouth2[1] - nose2Mouth1[1], nose2Mouth2[0] - nose2Mouth1[0])
+            * 180
+            / np.pi
+        )
         headRotationAngle = int(map_range(headRotationAngle, 0, 180, 180, 0))
-        headRotationAngle = int(process_running_average(
-            headRotationRunning, headRotationAngle))
+        headRotationAngle = int(
+            process_running_average(headRotationRunning, headRotationAngle)
+        )
         headTiltAngle = int(map_range(x, -20, 20, 120, 30))
-        headTiltAngle = int(process_running_average(
-            headTiltRunning, headTiltAngle))
+        headTiltAngle = int(process_running_average(headTiltRunning, headTiltAngle))
         torsoRotAngle = int(map_range(y, -20, 20, 50, 180))
-        torsoRotAngle = int(process_running_average(
-            torsoRotRunning, torsoRotAngle))
+        torsoRotAngle = int(process_running_average(torsoRotRunning, torsoRotAngle))
 
         # Then construct output string for Arduino
-        outputStr = '090' + tripleDigitInttoString(torsoRotAngle) + tripleDigitInttoString(
-            headRotationAngle) + tripleDigitInttoString(headTiltAngle) + '\n'
+        outputStr = (
+            "090"
+            + tripleDigitInttoString(torsoRotAngle)
+            + tripleDigitInttoString(headRotationAngle)
+            + tripleDigitInttoString(headTiltAngle)
+            + "\n"
+        )
         # print(outputStr)
-        ser.write(bytes(outputStr, 'utf-8'))
+        ser.write(bytes(outputStr, "utf-8"))
         print("HeadRot: ", headRotationAngle)
         print("TorsoRot: ", torsoRotAngle)
         print("x: ", x, " y: ", y)
@@ -197,38 +208,88 @@ while cap.isOpened():
         cv2.line(image, nose2Mouth1, nose2Mouth2, (0, 0, 255), 3)
 
         # Add the text on the image
-        cv2.putText(image, text, (20, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2)
-        cv2.putText(image, "x: " + str(np.round(x, 2)), (500, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(image, "y: " + str(np.round(y, 2)), (500, 100),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(image, "z: " + str(np.round(z, 2)), (500, 150),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(image, "HeadRot: " + str(headRotationAngle),
-                    (500, 200), cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 2)
-        cv2.putText(image, "HeadTilt: " + str(headTiltAngle),
-                    (500, 250), cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 2)
-        cv2.putText(image, "TorsoRot: " + str(torsoRotAngle),
-                    (500, 300), cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 2)
+        cv2.putText(image, text, (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2)
+        cv2.putText(
+            image,
+            "x: " + str(np.round(x, 2)),
+            (500, 50),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 0, 255),
+            2,
+        )
+        cv2.putText(
+            image,
+            "y: " + str(np.round(y, 2)),
+            (500, 100),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 0, 255),
+            2,
+        )
+        cv2.putText(
+            image,
+            "z: " + str(np.round(z, 2)),
+            (500, 150),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 0, 255),
+            2,
+        )
+        cv2.putText(
+            image,
+            "HeadRot: " + str(headRotationAngle),
+            (500, 200),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (0, 0, 255),
+            2,
+        )
+        cv2.putText(
+            image,
+            "HeadTilt: " + str(headTiltAngle),
+            (500, 250),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (0, 0, 255),
+            2,
+        )
+        cv2.putText(
+            image,
+            "TorsoRot: " + str(torsoRotAngle),
+            (500, 300),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (0, 0, 255),
+            2,
+        )
 
         end = time.time()
         totalTime = end - start
 
         fps = 1 / totalTime
         print("FPS: ", fps)
-        cv2.putText(image, "FPS: " + str(np.round(fps, 2)),
-                    (500, 350), cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 2)
+        cv2.putText(
+            image,
+            "FPS: " + str(np.round(fps, 2)),
+            (500, 350),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (0, 0, 255),
+            2,
+        )
 
-        mp_drawing.draw_landmarks(image=image,
-                                  landmark_list=face_landmarks,
-                                  connections=mp_face_mesh.FACEMESH_CONTOURS,
-                                  landmark_drawing_spec=drawing_spec,
-                                  connection_drawing_spec=drawing_spec)
+        mp_drawing.draw_landmarks(
+            image=image,
+            landmark_list=face_landmarks,
+            connections=mp_face_mesh.FACEMESH_CONTOURS,
+            landmark_drawing_spec=drawing_spec,
+            connection_drawing_spec=drawing_spec,
+        )
 
     cv2.imshow("Head pose estimation: ", image)
 
-    if (cv2.waitKey(5) & 0xFF == 27):
+    if cv2.waitKey(5) & 0xFF == 27:
         break
 
 cap.release()
