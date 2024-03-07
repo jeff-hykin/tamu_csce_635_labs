@@ -38,9 +38,11 @@ if True:
         usb_serial_paths =  [ f"/dev/{file_name}" for file_name in os.listdir('/dev') if file_name.startswith("tty.usbserial-") ]
         if len(usb_serial_paths) == 0:
             raise Exception(f'''I don't see any available USB connections (e.g. nothing matches /dev/tty.usbserial-XXXX)''')
-        
-        print("Which USB connection do you think it is?")
-        connection_path = select_item(usb_serial_paths)
+        if len(usb_serial_paths) == 1:
+            connection_path = usb_serial_paths[0]
+        else:
+            print("Which USB connection do you think it is?")
+            connection_path = select_item(usb_serial_paths)
     else:
         connection_path = "/dev/ttyUSB0"
     
