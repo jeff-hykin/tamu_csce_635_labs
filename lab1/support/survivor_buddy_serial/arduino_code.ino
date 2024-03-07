@@ -18,6 +18,7 @@ int headRotPos = resetPos;
 int headTiltPos = resetPos;
 int incrementAmount = 1;
 String in = "";
+const int ledPin = 13;
 
 void setup() {
   Serial.begin(115200);
@@ -26,11 +27,15 @@ void setup() {
   torsoServo.attach(torsoServoPin);
   headRotServo.attach(headRotServoPin);
   headTiltServo.attach(headTiltServoPin);
+  pinMode(ledPin, OUTPUT);
   
-  Serial.println("Send 1 to start");
-  while (Serial.read() != '1'){
-    
-  }
+  // Serial.println("Send 1 to start");
+  // while (Serial.read() != '1'){
+  //   digitalWrite(ledPin, HIGH);
+  //   delay(200);
+  //   digitalWrite(ledPin, LOW);
+  //   delay(200);
+  // }
   Serial.println("Started");
   writeAllServos();
 }
@@ -52,7 +57,7 @@ void loop() {
       headTiltPos = in.substring(9,12).toInt();
       printAllServoPos();
     }
-    else{
+    else {
       Serial.println("printing");
       Serial.println(in);
     }
