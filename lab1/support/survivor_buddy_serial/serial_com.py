@@ -49,17 +49,21 @@ if True:
 
 
 ser.write(b"1")
-def move_joint(torso_rot_angle, head_rotation_angle, head_tilt_angle):
-    assert torso_rot_angle >= 50 and torso_rot_angle <= 180        # is this yaw? or pitch
-    assert head_rotation_angle >= 0 and head_rotation_angle <= 180 # is this roll or yaw? (out of pitch,yaw,roll)
-    assert head_tilt_angle >= 30 and head_tilt_angle <= 120        # is this roll or pitch? (out of pitch,yaw,roll)
+def move_joint(base_pitch, base_yaw, head_roll, head_pitch):
+    """
+        base_pitch: leaning forward/back
+        base_yaw: left and right swivel
+        head_roll: top of the head goes to the left, bottom of the head goes to the right
+        head_pitch: nodding head up down
+    """
+    assert base_pitch >= 60 and base_pitch <= 150 # these bounds (just this one joint) are probably overly restrictive (untested)
+    assert base_yaw >= 50 and base_yaw <= 180
+    assert head_roll >= 0 and head_roll <= 180
+    assert head_pitch >= 30 and head_pitch <= 120
     
-    torso_value       = f"{int(torso_rot_angle)}".rjust(3, "0")
-    head_rotate_value = f"{int(head_rotation_angle)}".rjust(3, "0")
-    head_tilt_value   = f"{int(head_tilt_angle)}".rjust(3, "0")
+    base_pitch  = f"{int(base_pitch)}".rjust(3, "0")
+    base_yaw    = f"{int(base_yaw)}".rjust(3, "0")
+    head_roll   = f"{int(head_roll)}".rjust(3, "0")
+    head_pitch  = f"{int(head_pitch)}".rjust(3, "0")
     
-    ser.write(bytes(f"""090{torso_value}{head_rotate_value}{head_tilt_value}\n""", "utf-8"))
-# torso_joint
-# neck_swivel
-# head_tilt
-# head_nod
+    ser.write(bytes(f"""{base_pitch}{base_yaw}{head_roll}{head_pitch}\n""", "utf-8"))
