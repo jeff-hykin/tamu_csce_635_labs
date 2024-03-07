@@ -17,12 +17,7 @@ def map_range(value, low1, high1, low2, high2):
 
 
 def tripleDigitInttoString(num):
-    if num < 10:
-        return "00" + str(num)
-    elif num < 100:
-        return "0" + str(num)
-    else:
-        return str(num)
+    return f"{num}".rjust(3,"0")
 
 
 def process_running_average(running_vals: list, new_val: int):
