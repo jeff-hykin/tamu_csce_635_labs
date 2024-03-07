@@ -27,6 +27,17 @@ def select_item(items):
         except ValueError:
             print("Invalid input. Please enter a number.")
 
+def move_joint(torsoRotAngle, headRotationAngle, headTiltAngle):
+    assert torsoRotAngle >= 50 and torsoRotAngle <= 180
+    assert headRotationAngle >= 0 and headRotationAngle <= 180
+    assert headTiltAngle >= 30 and headTiltAngle <= 120
+    
+    torso_value       = f"{int(torsoRotAngle)}".rjust(3, "0")
+    head_rotate_value = f"{int(headRotationAngle)}".rjust(3, "0")
+    head_tilt_value   = f"{int(headTiltAngle)}".rjust(3, "0")
+    
+    ser.write(bytes(f"""090{torso_value}{head_rotate_value}{head_tilt_value}\n""", "utf-8"))
+
 # 
 # 
 # Setup the serial port
