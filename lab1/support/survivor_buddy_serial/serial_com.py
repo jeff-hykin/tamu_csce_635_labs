@@ -5,12 +5,60 @@ import time
 import serial
 import matplotlib.pyplot as plt
 from datetime import datetime
+import platform
+import os
 
-ser = serial.Serial("COM4", 57600)
+# 
+# helpers
+# 
+def display_menu(items):
+    for index, item in enumerate(items):
+        print(f"{index + 1}. {item}")
+
+def select_item(items):
+    display_menu(items)
+    while True:
+        try:
+            choice = int(input("Please select an item by entering its number: "))
+            if 1 <= choice <= len(items):
+                return items[choice - 1]
+            else:
+                print("Invalid choice. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+# 
+# 
+# Setup the serial port
+# 
+# 
+if True:
+    connection_path = ""
+    is_windows_os = platform.system().lower() == 'nt'
+    is_mac_os = platform.system().lower() == 'darwin'
+    if is_windows_os:
+        # note: might need to try different COM ports
+        connection_path = "COM4"
+    elif is_mac_os:
+        # List all files in the directory
+        usb_serial_paths =  [ f"/dev/{file_name}" for file_name in os.listdir('/dev') if file_name.startswith("/dev/tty.usbserial-") ]
+        if len(usb_serial_paths):
+            raise Exception(f'''I don't see any available USB connections (e.g. nothing matches /dev/tty.usbserial-XXXX)''')
+        
+        print("Which USB connection do you think it is?")
+        connection_path = select_item(usb_serial_paths)
+    else:
+        connection_path = "/dev/ttyUSB0"
+    
+    ser = serial.Serial(connection_path, 57600)
+
+
+
+
+
 # time.sleep(5)
 
 # Analog to the arduino map function, maps a value from one range to another
-
 
 def map_range(value, low1, high1, low2, high2):
     return low2 + (high2 - low2) * (value - low1) / (high1 - low1)
