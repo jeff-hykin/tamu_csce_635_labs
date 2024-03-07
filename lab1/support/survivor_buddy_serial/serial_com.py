@@ -36,7 +36,7 @@ if True:
     elif is_mac_os:
         # List all files in the directory
         usb_serial_paths =  [ f"/dev/{file_name}" for file_name in os.listdir('/dev') if file_name.startswith("/dev/tty.usbserial-") ]
-        if len(usb_serial_paths):
+        if len(usb_serial_paths) == 0:
             raise Exception(f'''I don't see any available USB connections (e.g. nothing matches /dev/tty.usbserial-XXXX)''')
         
         print("Which USB connection do you think it is?")
