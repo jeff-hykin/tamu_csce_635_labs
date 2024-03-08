@@ -38,10 +38,19 @@ def _increment_joint_value(each_diff, running_value, target_value):
 # 
 class SurvivorBuddy:
     """
-        NOTE:
-            - "pitch" is a motion like nodding your head "yes"
-            - "yaw" is a motion like nodding your head "no"
-            - "roll" is motion like tilting your head to one side in confusion/questioning
+    Example:
+        sb = SurvivorBuddy()
+        sb.move_joint(
+            neck_pitch=90, # 90 is neutral
+            # NOTE:
+            #     - "pitch" is a motion like nodding your head "yes"
+            #     - "yaw" is a motion like nodding your head "no"
+            #     - "roll" is motion like tilting your head to one side in confusion/questioning
+            neck_yaw=90,
+            head_roll=90,
+            head_pitch=90,
+            speed=40, # out of 100
+        )
     """
     neck_pitch_min = 35;neck_pitch_max = 150; # bigger = more forwards
     neck_yaw_min   = 20;neck_yaw_max   = 160; # smaller = MY left, survivor buddy's right
@@ -49,7 +58,16 @@ class SurvivorBuddy:
     head_pitch_min = 30;head_pitch_max = 120; # bigger= down
     
     # phone pass: 3112
-    def __init__(self, port_address=None, baud_rate=115200, windows_default_adress="COM4", linux_default_address="/dev/ttyUSB0"):
+    def __init__(
+        self,
+        port_address=None,
+        baud_rate=115200,
+        windows_default_adress="COM4",
+        linux_default_address="/dev/ttyUSB0",
+        inital_positions=[90,90,90,90],
+        logging=False,
+        include_legacy_survivor_buddy_support=True,
+    ):
         import threading
         import serial
         connection_path = ""
@@ -76,23 +94,35 @@ class SurvivorBuddy:
                 connection_path = linux_default_address
         
         self.connection_path = connection_path
-        self.scheduled_actions = []
-        self.positions = [90,90,90,90]
+        self.positions = inital_positions
+        initial_delay_time = 0.004 # seconds
+        self.scheduled_actions = [
+            # move to initial positions
+            (initial_delay_time, inital_positions)
+        ]
         
         self.connection = serial.Serial(connection_path, baud_rate)
         
-        while self.connection.in_waiting:
-            print(self.connection.readline())
-        self.connection.write(b"1")
-        while self.connection.in_waiting:
-            print(self.connection.readline())
-        
         # thread is only needed for move_joint_slowly (otherwise the sleep() in the thread would slow everything else down)
         self.still_running = False
-        def thing():
+        def thread_function():
             while self.still_running:
                 while self.connection.in_waiting:
-                    self.connection.readline()
+                    response = self.connection.readline()
+                    if logging:
+                        print(response.decode('utf-8'))
+                
+                # This little section is only needed to handle survivor buddy aduino code that
+                # 1. expects a "1" at the start
+                # 2. randomly, despite what the code says, will reset itself and expect a 1 again
+                # as long as it has a \n, sending the 1 every time shouldn't have adverse affects (the arduino code ignores emtpy/incomplete lines)
+                if include_legacy_survivor_buddy_support:
+                    self.connection.write(b"1\n")
+                    while self.connection.in_waiting:
+                        response = self.connection.readline()
+                        if logging:
+                            print(response.decode('utf-8'))
+                
                 if len(self.scheduled_actions) > 1:
                     action, positions = self.scheduled_actions.pop(0)
                     neck_pitch, neck_yaw, head_roll, head_pitch = positions
@@ -105,7 +135,7 @@ class SurvivorBuddy:
                     # without this sleep, even 1000 scheduled actions get executed more or less instantly
                     time.sleep(wait_time)
         
-        self.thread = threading.Thread(target=thing)
+        self.thread = threading.Thread(target=thread_function)
         self.thread.start()
     
     def __del__(self):
@@ -128,7 +158,7 @@ class SurvivorBuddy:
         assert head_pitch >= SurvivorBuddy.head_pitch and head_pitch <= SurvivorBuddy.head_pitch_max
         
         positions = list(self.positions)
-        self.scheduled_actions.clear()
+        self.scheduled_actions.clear() # interrupt any existing actions
         scheduled_actions = []
         
         diffs = [ (each1 - each2) for each1, each2 in zip((neck_pitch, neck_yaw, head_roll, head_pitch),positions)]
@@ -152,6 +182,5 @@ class SurvivorBuddy:
                 # ex: speed= 0.1   => 2.000 wait time (2 full seconds, times the number of sub-steps; insanely slow)
             )
         
-        # add all of them at the end to reduce thread-locking problems
+        # add all of them at the end to reduce thread-locking overhead
         self.scheduled_actions += scheduled_actions
-        
