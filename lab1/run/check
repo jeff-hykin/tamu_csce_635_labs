@@ -131,14 +131,17 @@ const checkChecklist = async (tasks)=>{
 const submitTag = async (tagName, commitMessage)=>{
     await run`git add -A`
     await run`git commit -m ${commitMessage} ${Stderr(null)}`
-    await run`git push ${Stderr(null)}`
-    await run`git push --delete origin ${tagName} ${Stderr(null)}`
     await run`git tag --delete ${tagName} ${Stderr(null)}`
-    await run`git push ${Stderr(null)}`
+    await run`git push --delete origin ${tagName} ${Stderr(null)}`
     await run`git tag ${tagName}`
-    await run`git push origin ${tagName}`
-    await run`git push ${Stderr(null)}`
-    console.log(green`\n\nIf you don't see any error messages you're done 👍`)
+    if (!(await run`git pull`.success)) {
+        console.log(yellow`\n\nLooks like there might be a merge conflict.\nIf you don't know how to handle merge conflicts, watch this tutorial:\n`+cyan`https://www.youtube.com/watch?v=QmKdodJU-js\n`)
+    } else {
+        await run`git push origin ${tagName}`
+        await run`git push`
+        await run`git status`
+        console.log(green`\n\nIf you don't see any error messages you're done 👍`)
+    }
 }
 
 // 
