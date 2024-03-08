@@ -36,11 +36,11 @@ def _increment_joint_value(each_diff, running_value, target_value):
 # Setup the serial port
 # 
 # 
-class SurvivorBuddy:
+class SurvivorBuddySerial:
     """
     Example:
-        sb = SurvivorBuddy()
-        sb.set_joints(
+        survivor_bud = SurvivorBuddySerial()
+        survivor_bud.set_joints(
             # NOTE: - "pitch" is a motion like nodding your head "yes"
             #       - "yaw" is a motion like nodding your head "no"
             #       - "roll" is motion like tilting your head to one side in confusion/questioning
@@ -84,7 +84,7 @@ class SurvivorBuddy:
                 # List all files in the directory
                 usb_serial_paths =  [ f"/dev/{file_name}" for file_name in os.listdir('/dev') if file_name.startswith("tty.usbserial-") ]
                 if len(usb_serial_paths) == 0:
-                    raise Exception(f'''I don't see any available USB connections (e.g. nothing matches /dev/tty.usbserial-XXXX)''')
+                    raise Exception(f'''[SurvivorBuddy Controller] I don't see any available USB connections (e.g. nothing matches /dev/tty.usbserial-XXXX)''')
                 if len(usb_serial_paths) == 1:
                     connection_path = usb_serial_paths[0]
                 else:
@@ -157,10 +157,10 @@ class SurvivorBuddy:
         """
         # NOTE: survivor buddy can actually move a bit faster than speed 1, but it very very very much risks damage to the parts from whiplash
         assert speed <= 100 and speed >= 0.1, "Speed of an action must be in the range 0.1 to 100" 
-        assert neck_pitch >= SurvivorBuddy.neck_pitch and neck_pitch <= SurvivorBuddy.neck_pitch_max 
-        assert neck_yaw   >= SurvivorBuddy.neck_yaw   and neck_yaw   <= SurvivorBuddy.neck_yaw_max   
-        assert head_roll  >= SurvivorBuddy.head_roll  and head_roll  <= SurvivorBuddy.head_roll_max  
-        assert head_pitch >= SurvivorBuddy.head_pitch and head_pitch <= SurvivorBuddy.head_pitch_max
+        assert neck_pitch >= SurvivorBuddySerial.neck_pitch_min and neck_pitch <= SurvivorBuddySerial.neck_pitch_max 
+        assert neck_yaw   >= SurvivorBuddySerial.neck_yaw_min   and neck_yaw   <= SurvivorBuddySerial.neck_yaw_max   
+        assert head_roll  >= SurvivorBuddySerial.head_roll_min  and head_roll  <= SurvivorBuddySerial.head_roll_max  
+        assert head_pitch >= SurvivorBuddySerial.head_pitch_min and head_pitch <= SurvivorBuddySerial.head_pitch_max
         
         positions = list(self.positions)
         self.scheduled_actions.clear() # interrupt any existing actions
