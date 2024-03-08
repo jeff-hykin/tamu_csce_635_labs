@@ -402,6 +402,29 @@ class SurvivorBuddySerial:
         
         # add all of them at the end to reduce thread-locking overhead
         self.scheduled_actions += scheduled_actions
+
+survivor_bud = None
+def send_to_survivor_bud(joint_positions, speed):
+    global survivor_bud
+    survivor_bud = survivor_bud or SurvivorBuddySerial(
+        port_address=None,
+        baud_rate=115200,
+        windows_default_address="COM4",
+        linux_default_address="/dev/ttyUSB0",
+        mac_default_address=None, # mac auto-detects name
+        inital_positions=[90,90,90,90],
+        logging=False,
+        include_legacy_survivor_buddy_support=True,
+    )
+    
+    survivor_bud.set_joints(
+        torso_pitch=joint_positions.torso_joint+90, # on hardware: larger = more forwards
+        torso_yaw=joint_positions.neck_swivel+90,   # on hardware: smaller = OUR left, survivor buddy's right
+        head_roll=joint_positions.head_tilt+90,     # on hardware: bigger = counterclockwise from OUR persepctive 
+        head_pitch=joint_positions.head_pitch+90,   # on hardware: bigger= down
+        speed=speed,
+    )
+
 # 
 # cli tool
 # 
