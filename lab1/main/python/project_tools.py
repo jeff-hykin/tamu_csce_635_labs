@@ -152,15 +152,19 @@ class JointPositions:
     """
         Note:
             Everything is in degrees
+        
+        Example:
+            JointPositions(
+                torso_joint=5, # larger = more forwards
+                neck_swivel=5, # more negative means more to your left side (the survivor buddy's right side)
+                head_tilt=5, # 
+                head_nod=5, # more negative = face the cieling
+            )
     """
-    torso_joint_max = 40 
-    torso_joint_min = -40 
-    neck_swivel_max = 40 
-    neck_swivel_min = -40 
-    head_tilt_max = 40 
-    head_tilt_min = -40
-    head_nod_max = 40 
-    head_nod_min = -40
+    torso_joint_max = 40;torso_joint_min = -40 
+    neck_swivel_max = 40;neck_swivel_min = -40 
+    head_tilt_max   = 40;head_tilt_min   = -40
+    head_nod_max    = 40;head_nod_min    = -40
     
     def __init__(self, list_input=None, *, torso_joint=None, neck_swivel=None, head_tilt=None, head_nod=None,):
         if isinstance(list_input, type(None)):
