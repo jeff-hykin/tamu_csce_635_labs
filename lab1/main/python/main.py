@@ -29,6 +29,7 @@ from blissful_basics import singleton, LazyDict, Warnings
 
 sys.path.append(os.path.dirname(__file__))
 from project_tools import JointPositions, time_since_prev, clip_value, convert_args
+from project_tools import send_to_survivor_bud, generate_fake_continous_noise
 
 # NOTE: you can edit anything, so if you don't like the structure just change it
 
@@ -203,12 +204,14 @@ class Robot:
         torso_change = Robot.previous_joint_positions.torso_joint - joint_goals.torso_joint
         
         if not config.send_to_rviz:
-            Robot.twist_obj.twist.linear.x  = -joint_goals.torso_joint
-            Robot.twist_obj.twist.linear.y  = -joint_goals.neck_swivel
-            Robot.twist_obj.twist.linear.z  =  joint_goals.head_tilt
-            Robot.twist_obj.twist.angular.x = -joint_goals.head_nod
-            Robot.joint_publisher.publish(Robot.twist_obj)
-            Robot.previous_joint_positions = joint_goals
+            send_to_survivor_bud(joint_goals)
+            if 0:
+                Robot.twist_obj.twist.linear.x  = -joint_goals.torso_joint
+                Robot.twist_obj.twist.linear.y  = -joint_goals.neck_swivel
+                Robot.twist_obj.twist.linear.z  =  joint_goals.head_tilt
+                Robot.twist_obj.twist.angular.x = -joint_goals.head_nod
+                Robot.joint_publisher.publish(Robot.twist_obj)
+                Robot.previous_joint_positions = joint_goals
         else:
             joint_current = Robot.move_group.get_current_joint_values()
             
