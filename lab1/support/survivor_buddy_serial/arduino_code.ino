@@ -1,5 +1,7 @@
 #include <Servo.h>
 
+#define BAUD_RATE 115200
+
 int baseServoPin = 2;
 int baseServo2Pin = 3;
 int torsoServoPin = 4;
@@ -21,7 +23,7 @@ String in = "";
 const int ledPin = 13;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   baseServo1.attach(baseServoPin);
   baseServo2.attach(baseServo2Pin);
   torsoServo.attach(torsoServoPin);
