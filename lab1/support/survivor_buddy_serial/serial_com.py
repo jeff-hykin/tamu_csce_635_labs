@@ -4,12 +4,9 @@ import time
 # 
 # helpers
 # 
-def display_menu(items):
+def ask_user_select_item(items):
     for index, item in enumerate(items):
         print(f"{index + 1}. {item}")
-
-def select_item(items):
-    display_menu(items)
     while True:
         try:
             choice = int(input("Please select an item by entering its number: "))
@@ -60,7 +57,7 @@ class SurvivorBuddy:
                     connection_path = usb_serial_paths[0]
                 else:
                     print("Which USB connection do you think it is?")
-                    connection_path = select_item(usb_serial_paths)
+                    connection_path = ask_user_select_item(usb_serial_paths)
             else:
                 connection_path = linux_default_address
         
