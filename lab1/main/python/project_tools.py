@@ -119,17 +119,17 @@ def generate_fake_continous_noise(delay=5, duration=4, noise_volume=1, spike_ind
             mode = int((int(time.time()) / duration) % 2) # 2=noise,silence
         
         if mode == 0:
-            print(f'''faker: continuous noise''')
-            fake_noise_helper.just_sent_clap = False
-        elif mode == 1:
             print(f'''faker: sending no noise''')
             fake_noise_helper.just_sent_clap = False
-            output = numpy.ones(audio_chunk_size)
+        elif mode == 1:
+            print(f'''faker: continuous noise''')
+            fake_noise_helper.just_sent_clap = False
+            output = numpy.ones(audio_chunk_size)*noise_volume
         elif mode == 2:
             if fake_noise_helper.just_sent_clap:
                 if fake_noise_helper.check_timer():
                     print(f'''faker: after clap: interrupt ''')
-                    output = numpy.ones(audio_chunk_size)
+                    output = numpy.ones(audio_chunk_size)*noise_volume
                 else:
                     print(f'''faker: after clap: lag time''')
             elif fake_noise_helper.just_sent_clap == None:
@@ -143,7 +143,7 @@ def generate_fake_continous_noise(delay=5, duration=4, noise_volume=1, spike_ind
                 output[spike_index] = noise_volume # one giant spike
     
     fake_noise_helper.prev_mode = None
-    return numpy.zeros(audio_chunk_size)
+    return output
 
 # 
 # joints
