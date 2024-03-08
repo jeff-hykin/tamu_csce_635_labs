@@ -404,7 +404,7 @@ class SurvivorBuddySerial:
         self.scheduled_actions += scheduled_actions
 
 survivor_bud = None
-def send_to_survivor_bud(joint_positions, speed):
+def send_to_survivor_bud(joint_positions, speed=40):
     global survivor_bud
     survivor_bud = survivor_bud or SurvivorBuddySerial(
         port_address=None,
