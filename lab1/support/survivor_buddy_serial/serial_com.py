@@ -77,8 +77,9 @@ class SurvivorBuddy:
             print(self.connection.readline())
         
         # thread is only needed for move_joint_slowly (otherwise the sleep() in the thread would slow everything else down)
+        self.still_running = False
         def thing():
-            while True:
+            while self.still_running:
                 while self.connection.in_waiting:
                     self.connection.readline()
                 if len(self.scheduled_actions) > 1:
@@ -86,9 +87,14 @@ class SurvivorBuddy:
                     # without this sleep, even 1000 scheduled actions get executed more or less instantly
                     time.sleep(0.001)
         
-        my_thread = threading.Thread(target=thing)
-        my_thread.start()
+        self.thread = threading.Thread(target=thing)
+        self.thread.start()
     
+    def __del__(self):
+        self.still_running = False
+        self.thread.join()
+    
+    # def _dangerous_move_joint(self, neck_pitch, neck_yaw, head_roll, head_pitch, wait_time):
     def _dangerous_move_joint(self, neck_pitch, neck_yaw, head_roll, head_pitch):
         """
             Internal only, b/c this method doesn't keep track of current position OR do bounds checking
