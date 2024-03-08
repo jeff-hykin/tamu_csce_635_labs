@@ -40,12 +40,11 @@ class SurvivorBuddy:
     """
     Example:
         sb = SurvivorBuddy()
-        sb.move_joint(
+        sb.set_joints(
+            # NOTE: - "pitch" is a motion like nodding your head "yes"
+            #       - "yaw" is a motion like nodding your head "no"
+            #       - "roll" is motion like tilting your head to one side in confusion/questioning
             neck_pitch=90, # 90 is neutral
-            # NOTE:
-            #     - "pitch" is a motion like nodding your head "yes"
-            #     - "yaw" is a motion like nodding your head "no"
-            #     - "roll" is motion like tilting your head to one side in confusion/questioning
             neck_yaw=90,
             head_roll=90,
             head_pitch=90,
@@ -62,8 +61,9 @@ class SurvivorBuddy:
         self,
         port_address=None,
         baud_rate=115200,
-        windows_default_adress="COM4",
+        windows_default_address="COM4",
         linux_default_address="/dev/ttyUSB0",
+        mac_default_address=None, # mac auto-detects name
         inital_positions=[90,90,90,90],
         logging=False,
         include_legacy_survivor_buddy_support=True,
@@ -79,7 +79,7 @@ class SurvivorBuddy:
             is_mac_os = platform.system().lower() == 'darwin'
             if is_windows_os:
                 # note: might need to try different COM ports
-                connection_path = windows_default_adress
+                connection_path = windows_default_address
             elif is_mac_os:
                 # List all files in the directory
                 usb_serial_paths =  [ f"/dev/{file_name}" for file_name in os.listdir('/dev') if file_name.startswith("tty.usbserial-") ]
@@ -88,8 +88,13 @@ class SurvivorBuddy:
                 if len(usb_serial_paths) == 1:
                     connection_path = usb_serial_paths[0]
                 else:
-                    print("Which USB connection do you think it is?")
-                    connection_path = ask_user_select_item(usb_serial_paths)
+                    if mac_default_address in usb_serial_paths:
+                        connection_path = mac_default_address
+                    else:
+                        print("Which USB connection do you think it is?")
+                        print("(Note: you can have this auto-default)")
+                        print("(just add SurvivorBuddy(mac_default_address=/dev/somethin'))")
+                        connection_path = ask_user_select_item(usb_serial_paths)
             else:
                 connection_path = linux_default_address
         
@@ -112,7 +117,7 @@ class SurvivorBuddy:
                     if logging:
                         print(response.decode('utf-8'))
                 
-                # This little section is only needed to handle survivor buddy aduino code that
+                # This little section is only needed to handle survivor buddy arduino code that
                 # 1. expects a "1" at the start
                 # 2. randomly, despite what the code says, will reset itself and expect a 1 again
                 # as long as it has a \n, sending the 1 every time shouldn't have adverse affects (the arduino code ignores emtpy/incomplete lines)
@@ -142,7 +147,7 @@ class SurvivorBuddy:
         self.still_running = False
         self.thread.join()
     
-    def move_joint(self, neck_pitch, neck_yaw, head_roll, head_pitch, speed=40):
+    def set_joints(self, neck_pitch, neck_yaw, head_roll, head_pitch, speed=40):
         """
             neck_pitch: leaning forward/back, bigger = more forwards
             neck_yaw: left and right swivel, smaller = more to OUR left, survivor buddy's right
