@@ -44,17 +44,17 @@ class SurvivorBuddySerial:
             # NOTE: - "pitch" is a motion like nodding your head "yes"
             #       - "yaw" is a motion like nodding your head "no"
             #       - "roll" is motion like tilting your head to one side in confusion/questioning
-            torso_pitch=90, # 90 is neutral
-            torso_yaw=90,
-            head_roll=90,
-            head_pitch=90,
+            neck_pitch=90, bigger = more forwards
+            neck_yaw=90, smaller = OUR left, survivor buddy's right
+            head_roll=90, bigger = counterclockwise from OUR persepctive 
+            head_pitch=90, bigger= down
             speed=40, # out of 100
         )
     """
-    torso_pitch_min = 35;torso_pitch_max = 150; # bigger = more forwards
-    torso_yaw_min   = 20;torso_yaw_max   = 160; # smaller = MY left, survivor buddy's right
-    head_roll_min  = 0  ;head_roll_max  = 180; # bigger = counterclockwise from MY persepctive 
-    head_pitch_min = 30 ;head_pitch_max = 120; # bigger= down
+    neck_pitch_min = 35;neck_pitch_max = 150; # bigger = more forwards
+    neck_yaw_min   = 20;neck_yaw_max   = 160; # smaller = OUR left, survivor buddy's right
+    head_roll_min  = 0 ;head_roll_max  = 180; # bigger = counterclockwise from OUR persepctive 
+    head_pitch_min = 30;head_pitch_max = 120; # bigger= down
     
     # phone pass: 3112
     def __init__(
