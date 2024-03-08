@@ -44,17 +44,17 @@ class SurvivorBuddySerial:
             # NOTE: - "pitch" is a motion like nodding your head "yes"
             #       - "yaw" is a motion like nodding your head "no"
             #       - "roll" is motion like tilting your head to one side in confusion/questioning
-            neck_pitch=90, # 90 is neutral
-            neck_yaw=90,
+            torso_pitch=90, # 90 is neutral
+            torso_yaw=90,
             head_roll=90,
             head_pitch=90,
             speed=40, # out of 100
         )
     """
-    neck_pitch_min = 35;neck_pitch_max = 150; # bigger = more forwards
-    neck_yaw_min   = 20;neck_yaw_max   = 160; # smaller = MY left, survivor buddy's right
-    head_roll_min  = 0 ;head_roll_max  = 180; # bigger = counterclockwise from MY persepctive 
-    head_pitch_min = 30;head_pitch_max = 120; # bigger= down
+    torso_pitch_min = 35;torso_pitch_max = 150; # bigger = more forwards
+    torso_yaw_min   = 20;torso_yaw_max   = 160; # smaller = MY left, survivor buddy's right
+    head_roll_min  = 0  ;head_roll_max  = 180; # bigger = counterclockwise from MY persepctive 
+    head_pitch_min = 30 ;head_pitch_max = 120; # bigger= down
     
     # phone pass: 3112
     def __init__(
@@ -130,12 +130,12 @@ class SurvivorBuddySerial:
                 
                 if len(self.scheduled_actions) > 1:
                     action, positions = self.scheduled_actions.pop(0)
-                    neck_pitch, neck_yaw, head_roll, head_pitch = positions
-                    neck_pitch  = f"{int(neck_pitch)}".rjust(3, "0")
-                    neck_yaw    = f"{int(neck_yaw)}".rjust(3, "0")
-                    head_roll   = f"{int(head_roll)}".rjust(3, "0")
-                    head_pitch  = f"{int(head_pitch)}".rjust(3, "0")
-                    self.connection.write(bytes(f"""{neck_pitch}{neck_yaw}{head_roll}{head_pitch}\n""", "utf-8"))
+                    torso_pitch, torso_yaw, head_roll, head_pitch = positions
+                    torso_pitch  = f"{int(torso_pitch)}".rjust(3, "0")
+                    torso_yaw    = f"{int(torso_yaw)}".rjust(3, "0")
+                    head_roll    = f"{int(head_roll)}".rjust(3, "0")
+                    head_pitch   = f"{int(head_pitch)}".rjust(3, "0")
+                    self.connection.write(bytes(f"""{torso_pitch}{torso_yaw}{head_roll}{head_pitch}\n""", "utf-8"))
                     self.positions = positions
                     # without this sleep, even 1000 scheduled actions get executed more or less instantly
                     time.sleep(wait_time)
@@ -147,39 +147,39 @@ class SurvivorBuddySerial:
         self.still_running = False
         self.thread.join()
     
-    def set_joints(self, neck_pitch, neck_yaw, head_roll, head_pitch, speed=40):
+    def set_joints(self, torso_pitch, torso_yaw, head_roll, head_pitch, speed=40):
         """
-            neck_pitch: leaning forward/back, bigger = more forwards
-            neck_yaw: left and right swivel, smaller = more to OUR left, survivor buddy's right
+            torso_pitch: leaning forward/back, bigger = more forwards
+            torso_yaw: left and right swivel, smaller = more to OUR left, survivor buddy's right
             head_roll: top of the head goes to the left, bottom of the head goes to the right, bigger = counterclockwise from MY persepctive 
             head_pitch: nodding head up down, bigger = down
             speed: 1 to 100
         """
         # NOTE: survivor buddy can actually move a bit faster than speed 1, but it very very very much risks damage to the parts from whiplash
         assert speed <= 100 and speed >= 0.1, "Speed of an action must be in the range 0.1 to 100" 
-        assert neck_pitch >= SurvivorBuddySerial.neck_pitch_min and neck_pitch <= SurvivorBuddySerial.neck_pitch_max 
-        assert neck_yaw   >= SurvivorBuddySerial.neck_yaw_min   and neck_yaw   <= SurvivorBuddySerial.neck_yaw_max   
-        assert head_roll  >= SurvivorBuddySerial.head_roll_min  and head_roll  <= SurvivorBuddySerial.head_roll_max  
-        assert head_pitch >= SurvivorBuddySerial.head_pitch_min and head_pitch <= SurvivorBuddySerial.head_pitch_max
+        assert torso_pitch >= SurvivorBuddySerial.torso_pitch_min and torso_pitch <= SurvivorBuddySerial.torso_pitch_max 
+        assert torso_yaw   >= SurvivorBuddySerial.torso_yaw_min   and torso_yaw   <= SurvivorBuddySerial.torso_yaw_max   
+        assert head_roll   >= SurvivorBuddySerial.head_roll_min  and head_roll  <= SurvivorBuddySerial.head_roll_max  
+        assert head_pitch  >= SurvivorBuddySerial.head_pitch_min and head_pitch <= SurvivorBuddySerial.head_pitch_max
         
         positions = list(self.positions)
         self.scheduled_actions.clear() # interrupt any existing actions
         scheduled_actions = []
         
-        diffs = [ (each1 - each2) for each1, each2 in zip((neck_pitch, neck_yaw, head_roll, head_pitch),positions)]
-        neck_pitch_diff, neck_yaw_diff, head_roll_diff, head_pitch_diff = diffs
-        new_neck_pitch, new_neck_yaw, new_head_roll, new_head_pitch = positions
+        diffs = [ (each1 - each2) for each1, each2 in zip((torso_pitch, torso_yaw, head_roll, head_pitch),positions)]
+        torso_pitch_diff, torso_yaw_diff, head_roll_diff, head_pitch_diff = diffs
+        new_torso_pitch, new_torso_yaw, new_head_roll, new_head_pitch = positions
         
         for _ in range(int(max(abs(each) for each in diffs))):
-            # neck_pitch, neck_yaw, head_roll, head_pitch = self.positions = [ base+change for change, base in zip(diffs, self.positions) ]
-            new_neck_pitch = _increment_joint_value(neck_pitch_diff, new_neck_pitch, neck_pitch)
-            new_neck_yaw   = _increment_joint_value(neck_yaw_diff, new_neck_yaw, neck_yaw)
-            new_head_roll  = _increment_joint_value(head_roll_diff, new_head_roll, head_roll)
-            new_head_pitch = _increment_joint_value(head_pitch_diff, new_head_pitch, head_pitch)
+            # torso_pitch, torso_yaw, head_roll, head_pitch = self.positions = [ base+change for change, base in zip(diffs, self.positions) ]
+            new_torso_pitch = _increment_joint_value(torso_pitch_diff, new_torso_pitch, torso_pitch)
+            new_torso_yaw   = _increment_joint_value(torso_yaw_diff, new_torso_yaw, torso_yaw)
+            new_head_roll   = _increment_joint_value(head_roll_diff, new_head_roll, head_roll)
+            new_head_pitch  = _increment_joint_value(head_pitch_diff, new_head_pitch, head_pitch)
             
             scheduled_actions.append(
                 (
-                    new_neck_pitch, new_neck_yaw, new_head_roll, new_head_pitch
+                    new_torso_pitch, new_torso_yaw, new_head_roll, new_head_pitch
                 ),
                 0.002/(speed/100)
                 # ex: speed=100    => 0.002 wait time
