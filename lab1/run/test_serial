@@ -9,11 +9,16 @@ import { project } from "../support/js_tools/project.js"
 const { projectRoot, settingsPath, certFile, keyFile, catkinFolder, serverFolder } = project
 import { FileSystem, glob } from "https://deno.land/x/quickr@0.6.62/main/file_system.js"
 
-const { owner, group, others} = await FileSystem.getPermissions({path:"/dev/ttyUSB0"})
-if (!(owner.canRead && owner.canWrite && owner.canExecute && group.canRead && group.canWrite && group.canExecute)) {
-    console.log("Making sure /dev/ttyUSB0 is accessible")
-    await run`sudo chmod 777 /dev/ttyUSB0`
+try {
+    const { owner, group, others} = await FileSystem.getPermissions({path:"/dev/ttyUSB0"})
+    if (!(owner.canRead && owner.canWrite && owner.canExecute && group.canRead && group.canWrite && group.canExecute)) {
+        console.log("Making sure /dev/ttyUSB0 is accessible")
+        await run`sudo chmod 777 /dev/ttyUSB0`
+    }
+} catch (error) {
+    console.error(error)
 }
+
 await run`python3 ${`${projectRoot}/main/python/helper_scripts/physical_serial_test.py`}`
 
 // (this comment is part of deno-guillotine, dont remove) #>

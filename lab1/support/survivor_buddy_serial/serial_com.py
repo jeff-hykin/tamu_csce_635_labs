@@ -44,15 +44,15 @@ class SurvivorBuddySerial:
             # NOTE: - "pitch" is a motion like nodding your head "yes"
             #       - "yaw" is a motion like nodding your head "no"
             #       - "roll" is motion like tilting your head to one side in confusion/questioning
-            neck_pitch=90, bigger = more forwards
-            neck_yaw=90, smaller = OUR left, survivor buddy's right
+            torso_pitch=90, bigger = more forwards
+            torso_yaw=90, smaller = OUR left, survivor buddy's right
             head_roll=90, bigger = counterclockwise from OUR persepctive 
             head_pitch=90, bigger= down
             speed=40, # out of 100
         )
     """
-    neck_pitch_min = 35;neck_pitch_max = 150; # bigger = more forwards
-    neck_yaw_min   = 20;neck_yaw_max   = 160; # smaller = OUR left, survivor buddy's right
+    torso_pitch_min = 35;torso_pitch_max = 150; # bigger = more forwards
+    torso_yaw_min   = 20;torso_yaw_max   = 160; # smaller = OUR left, survivor buddy's right
     head_roll_min  = 0 ;head_roll_max  = 180; # bigger = counterclockwise from OUR persepctive 
     head_pitch_min = 30;head_pitch_max = 120; # bigger= down
     
@@ -109,13 +109,13 @@ class SurvivorBuddySerial:
         self.connection = serial.Serial(connection_path, baud_rate)
         
         # thread is only needed for move_joint_slowly (otherwise the sleep() in the thread would slow everything else down)
-        self.still_running = False
+        self.still_running = True
         def thread_function():
             while self.still_running:
                 while self.connection.in_waiting:
                     response = self.connection.readline()
                     if logging:
-                        print(response.decode('utf-8'))
+                        print(response.decode('utf-8').replace("\r\n","\n"))
                 
                 # This little section is only needed to handle survivor buddy arduino code that
                 # 1. expects a "1" at the start
@@ -126,10 +126,10 @@ class SurvivorBuddySerial:
                     while self.connection.in_waiting:
                         response = self.connection.readline()
                         if logging:
-                            print(response.decode('utf-8'))
+                            print(response.decode('utf-8').replace("\r\n","\n"))
                 
                 if len(self.scheduled_actions) > 1:
-                    action, positions = self.scheduled_actions.pop(0)
+                    positions, wait_time = self.scheduled_actions.pop(0)
                     torso_pitch, torso_yaw, head_roll, head_pitch = positions
                     torso_pitch  = f"{int(torso_pitch)}".rjust(3, "0")
                     torso_yaw    = f"{int(torso_yaw)}".rjust(3, "0")
@@ -147,7 +147,7 @@ class SurvivorBuddySerial:
         self.still_running = False
         self.thread.join()
     
-    def set_joints(self, torso_pitch, torso_yaw, head_roll, head_pitch, speed=40):
+    def set_joints(self, torso_pitch, torso_yaw, head_roll, head_pitch, speed=10):
         """
             torso_pitch: leaning forward/back, bigger = more forwards
             torso_yaw: left and right swivel, smaller = more to OUR left, survivor buddy's right
@@ -179,12 +179,14 @@ class SurvivorBuddySerial:
             
             scheduled_actions.append(
                 (
-                    new_torso_pitch, new_torso_yaw, new_head_roll, new_head_pitch
-                ),
-                0.002/(speed/100)
-                # ex: speed=100    => 0.002 wait time
-                # ex: speed= 50    => 0.004 wait time
-                # ex: speed= 0.1   => 2.000 wait time (2 full seconds, times the number of sub-steps; insanely slow)
+                    (
+                        new_torso_pitch, new_torso_yaw, new_head_roll, new_head_pitch
+                    ),
+                    0.002/(speed/100)
+                    # ex: speed=100    => 0.002 wait time
+                    # ex: speed= 50    => 0.004 wait time
+                    # ex: speed= 0.1   => 2.000 wait time (2 full seconds, times the number of sub-steps; insanely slow)
+                )
             )
         
         # add all of them at the end to reduce thread-locking overhead
@@ -200,7 +202,7 @@ if __name__ == '__main__':
         mac_default_address=None, # mac auto-detects name
         inital_positions=[90,90,90,90],
         logging=False,
-        include_legacy_survivor_buddy_support=True,
+        include_legacy_survivor_buddy_support=False,
     )
     # 
     # cli loop 
@@ -214,7 +216,7 @@ if __name__ == '__main__':
         chunks = [""]
         for each in response:
             is_valid = each == "." or each == "-" or each.isdigit()
-            if not is_valid:
+            if not is_valid and chunks[-1] != "":
                 chunks.append("")
             if is_valid:
                 chunks[-1]+=each
@@ -222,5 +224,12 @@ if __name__ == '__main__':
         if len(chunks[-1]) == 0:
             chunks.pop()
         
-        new_joints = [ int(each) for each in chunks ]
-        survivor_bud.set_joints(*new_joints, speed=40)
+        try:
+            new_joints = [ int(each)+90 for each in chunks ]
+            survivor_bud.set_joints(*new_joints, speed=10)
+        except Exception as error:
+            print(error)
+            print()
+    
+    survivor_bud.__del__()
+    print("done")
