@@ -17,6 +17,20 @@ def ask_user_select_item(items):
         except ValueError:
             print("Invalid input. Please enter a number.")
 
+# this function probably makes no sense out of context
+def _increment_joint_value(each_diff, running_value, target_value):
+    if each_diff == 0:
+        pass
+    if each_diff > 0:
+        running_value += 1
+        if running_value > target_value:
+            running_value = target_value
+    else:
+        running_value -= 1
+        if running_value < target_value:
+            running_value = target_value
+    
+    return running_value
 # 
 # 
 # Setup the serial port
@@ -80,9 +94,16 @@ class SurvivorBuddy:
                 while self.connection.in_waiting:
                     self.connection.readline()
                 if len(self.scheduled_actions) > 1:
-                    self.connection.write(self.scheduled_actions.pop(0))
+                    action, positions = self.scheduled_actions.pop(0)
+                    neck_pitch, neck_yaw, head_roll, head_pitch = positions
+                    neck_pitch  = f"{int(neck_pitch)}".rjust(3, "0")
+                    neck_yaw    = f"{int(neck_yaw)}".rjust(3, "0")
+                    head_roll   = f"{int(head_roll)}".rjust(3, "0")
+                    head_pitch  = f"{int(head_pitch)}".rjust(3, "0")
+                    self.connection.write(bytes(f"""{neck_pitch}{neck_yaw}{head_roll}{head_pitch}\n""", "utf-8"))
+                    self.positions = positions
                     # without this sleep, even 1000 scheduled actions get executed more or less instantly
-                    time.sleep(0.001)
+                    time.sleep(wait_time)
         
         self.thread = threading.Thread(target=thing)
         self.thread.start()
@@ -91,57 +112,46 @@ class SurvivorBuddy:
         self.still_running = False
         self.thread.join()
     
-    # def _dangerous_move_joint(self, neck_pitch, neck_yaw, head_roll, head_pitch, wait_time):
-    def _dangerous_move_joint(self, neck_pitch, neck_yaw, head_roll, head_pitch):
-        """
-            Internal only, b/c this method doesn't keep track of current position OR do bounds checking
-        """
-        neck_pitch  = f"{int(neck_pitch)}".rjust(3, "0")
-        neck_yaw    = f"{int(neck_yaw)}".rjust(3, "0")
-        head_roll   = f"{int(head_roll)}".rjust(3, "0")
-        head_pitch  = f"{int(head_pitch)}".rjust(3, "0")
-        
-        self.scheduled_actions.append(bytes(f"""{neck_pitch}{neck_yaw}{head_roll}{head_pitch}\n""", "utf-8"))
-    
-    def move_joint_slowly(self, neck_pitch, neck_yaw, head_roll, head_pitch, slowness=5):
+    def move_joint(self, neck_pitch, neck_yaw, head_roll, head_pitch, speed=40):
         """
             neck_pitch: leaning forward/back, bigger = more forwards
             neck_yaw: left and right swivel, smaller = more to OUR left, survivor buddy's right
             head_roll: top of the head goes to the left, bottom of the head goes to the right, bigger = counterclockwise from MY persepctive 
             head_pitch: nodding head up down, bigger = down
+            speed: 1 to 100
         """
+        # NOTE: survivor buddy can actually move a bit faster than speed 1, but it very very very much risks damage to the parts from whiplash
+        assert speed <= 100 and speed >= 0.1, "Speed of an action must be in the range 0.1 to 100" 
         assert neck_pitch >= SurvivorBuddy.neck_pitch and neck_pitch <= SurvivorBuddy.neck_pitch_max 
         assert neck_yaw   >= SurvivorBuddy.neck_yaw   and neck_yaw   <= SurvivorBuddy.neck_yaw_max   
         assert head_roll  >= SurvivorBuddy.head_roll  and head_roll  <= SurvivorBuddy.head_roll_max  
         assert head_pitch >= SurvivorBuddy.head_pitch and head_pitch <= SurvivorBuddy.head_pitch_max
         
-        diffs = [ (each1 - each2) for each1, each2 in zip((neck_pitch, neck_yaw, head_roll, head_pitch),self.positions)]
+        positions = list(self.positions)
+        self.scheduled_actions.clear()
+        scheduled_actions = []
+        
+        diffs = [ (each1 - each2) for each1, each2 in zip((neck_pitch, neck_yaw, head_roll, head_pitch),positions)]
         neck_pitch_diff, neck_yaw_diff, head_roll_diff, head_pitch_diff = diffs
-        new_neck_pitch, new_neck_yaw, new_head_roll, new_head_pitch = self.positions
-        def increment_value(each_diff, running_value, target_value):
-            if each_diff == 0:
-                pass
-            if each_diff > 0:
-                running_value += 1
-                if running_value > target_value:
-                    running_value = target_value
-            else:
-                running_value -= 1
-                if running_value < target_value:
-                    running_value = target_value
-            
-            return running_value
-            
+        new_neck_pitch, new_neck_yaw, new_head_roll, new_head_pitch = positions
+        
         for _ in range(int(max(abs(each) for each in diffs))):
             # neck_pitch, neck_yaw, head_roll, head_pitch = self.positions = [ base+change for change, base in zip(diffs, self.positions) ]
-            new_neck_pitch = increment_value(neck_pitch_diff, new_neck_pitch, neck_pitch)
-            new_neck_yaw = increment_value(neck_yaw_diff, new_neck_yaw, neck_yaw)
-            new_head_roll = increment_value(head_roll_diff, new_head_roll, head_roll)
-            new_head_pitch = increment_value(head_pitch_diff, new_head_pitch, head_pitch)
+            new_neck_pitch = _increment_joint_value(neck_pitch_diff, new_neck_pitch, neck_pitch)
+            new_neck_yaw   = _increment_joint_value(neck_yaw_diff, new_neck_yaw, neck_yaw)
+            new_head_roll  = _increment_joint_value(head_roll_diff, new_head_roll, head_roll)
+            new_head_pitch = _increment_joint_value(head_pitch_diff, new_head_pitch, head_pitch)
             
-            for _ in range(int(slowness)):
-                self._dangerous_move_joint(
+            scheduled_actions.append(
+                (
                     new_neck_pitch, new_neck_yaw, new_head_roll, new_head_pitch
-                )
+                ),
+                0.002/(speed/100)
+                # ex: speed=100    => 0.002 wait time
+                # ex: speed= 50    => 0.004 wait time
+                # ex: speed= 0.1   => 2.000 wait time (2 full seconds, times the number of sub-steps; insanely slow)
+            )
         
-        self.positions = [new_neck_pitch,new_neck_yaw,new_head_roll,new_head_pitch]
+        # add all of them at the end to reduce thread-locking problems
+        self.scheduled_actions += scheduled_actions
+        
