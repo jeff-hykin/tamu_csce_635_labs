@@ -55,6 +55,5 @@ In person demo Fri March 8th
 - Deploy behaviors to the physical robot
     1. Plug in survivor_buddy's USB cable into your laptop
     2. Make sure it is being detected by running the command `ls /dev/ttyUSB*`, you should see /dev/ttyUSB0 as the output of the previous command.
-    3. In a terminal run `run/5_ros_serial`
-    4. To test that the microcontroller is receiving commands, in another terminal run `. ./.env && python ./main/python/helper_scripts/physical_test.py`
-    5. Now repeat the steps of running on rviz (4 terminals) BUT, this time when you run your python do:<br>`. ./.env && python ./main/python/main.py --send_to_rviz False`
+    3. To test if the connection works run `run/test_serial`
+    4. Now repeat the steps of running on rviz (4 terminals) BUT, instead of `run/4_python` do `run/4_python --send_to_rviz False`
