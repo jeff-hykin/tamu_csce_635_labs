@@ -113,6 +113,7 @@ import { fadeAfterNoInteraction } from "./helpers/opacity_helper.js" // this is 
         if (MessageLog.element) {
             const message = messages.join(" ")
             const escapedText = new Option(message).innerHTML
+            MessageLog.element.innerHTML = MessageLog.element.innerHTML.slice(-10_000) // cap it so it doesnt just become massive
             MessageLog.element.innerHTML += `<br>...<br>${escapedText.replace(/\n/g,"<br>")}`
             MessageLog.element.scrollTop = MessageLog.element.scrollHeight
         }
