@@ -230,7 +230,7 @@ def send_to_survivor_bud(joint_positions, speed=40):
         torso_pitch=joint_positions.torso_joint+90, # on hardware: larger = more forwards
         torso_yaw=joint_positions.neck_swivel+90,   # on hardware: smaller = OUR left, survivor buddy's right
         head_roll=joint_positions.head_tilt+90,     # on hardware: bigger = counterclockwise from OUR persepctive 
-        head_pitch=joint_positions.head_pitch+90,   # on hardware: bigger= down
+        head_pitch=joint_positions.head_nod+90,   # on hardware: bigger= down
         speed=speed,
     )
 
