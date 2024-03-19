@@ -13,15 +13,27 @@ import dax from "https://deno.land/x/dax@0.39.2/mod.ts"
 import { deepCopy, deepCopySymbol, allKeyDescriptions, deepSortObject, shallowSortObject, isGeneratorType,isAsyncIterable, isSyncIterable, isTechnicallyIterable, isSyncIterableObjectOrContainer, allKeys } from "https://deno.land/x/good@1.6.0.0/value.js"
 
 const $ = (...args)=>dax(...args).noThrow()
-# const $$ = (...args)=>dax(...args).noThrow().quiet("stdout")
-# .postProcess((afterThen)=>{
-#     return afterThen.stdout.replace(/\r?\n$/, "")
-# })
+// const $$ = (...args)=>dax(...args).noThrow().quiet("stdout")
+// .postProcess((afterThen)=>{
+//     return afterThen.stdout.replace(/\r?\n$/, "")
+// })
 
 
 // try to install zellij if needed
+Deno.env.set("PATH", `${Deno.env.get("PATH")}:${FileSystem.home}/Commands/`)
 if (!await hasCommand(`zellij`)) {
-    await $`sudo snap install zellij --classic`
+    let url = "https://github.com/zellij-org/zellij/releases/download/v0.39.2/zellij-aarch64-unknown-linux-musl.tar.gz"
+    if (Deno.build.os == "darwin") {
+        url = "https://github.com/zellij-org/zellij/releases/download/v0.39.2/zellij-aarch64-apple-darwin.tar.gz"
+    }
+    const result = await fetch(url)
+    const buffer = await result.arrayBuffer()
+    const tarPath = `${FileSystem.home}/Commands/zellij.tar`
+    await FileSystem.write({
+        path: tarPath,
+        data: new Uint8Array(buffer),
+    })
+    await $`tar -xvf ${tarPath}`.cwd(FileSystem.parentPath(tarPath))
 } 
 
 FileSystem.cwd = projectRoot
