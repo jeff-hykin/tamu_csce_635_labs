@@ -375,7 +375,7 @@ import { fadeAfterNoInteraction } from "./helpers/opacity_helper.js" // this is 
     let face = html`<Face height=500 width=3000 style="position: fixed; top: 0rem; right: calc(50vw); transform: translateX(50%);" />`
     let controls = html`
         <div
-            style="display: flex; position: fixed; bottom: 0rem; right: 0; flex-direction: column; width: 26rem; transform: scale(0.8) translate(17%, 18%); padding: 2rem; margin: 1rem; border-radius: 12px; background-color: rgba(0,0,0,0.18); color: white; transition: all 0.2s ease-in-out 0s; z-index: 2; border-radius: 0;"
+            style="display: flex; position: fixed; bottom: 0rem; left: 0; flex-direction: column; width: 26rem; transform: scale(0.8) translate(17%, 18%); padding: 2rem; margin: 1rem; border-radius: 12px; background-color: rgba(0,0,0,0.18); color: white; transition: all 0.2s ease-in-out 0s; z-index: 2; border-radius: 0;"
             >
             <CameraSwitch></CameraSwitch>
             <RosConnecter></RosConnecter>
