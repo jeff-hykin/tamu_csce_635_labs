@@ -8,14 +8,15 @@ import "../support/js_tools/env_vars.js"
 import { project } from "../support/js_tools/project.js"
 const { projectRoot, settingsPath, certFile, keyFile, catkinFolder, serverFolder } = project
 import { FileSystem, glob } from "https://deno.land/x/quickr@0.6.63/main/file_system.js"
-// import dax from "https://deno.land/x/dax@0.39.2/mod.ts"
-import dax from "/Users/jeffhykin/repos/dax/mod.ts"
+import dax from "https://deno.land/x/dax@0.39.2/mod.ts"
+// import dax from "/Users/jeffhykin/repos/dax/mod.ts"
 import { deepCopy, deepCopySymbol, allKeyDescriptions, deepSortObject, shallowSortObject, isGeneratorType,isAsyncIterable, isSyncIterable, isTechnicallyIterable, isSyncIterableObjectOrContainer, allKeys } from "https://deno.land/x/good@1.6.0.0/value.js"
 
 const $ = (...args)=>dax(...args).noThrow()
-const $$ = (...args)=>dax(...args).noThrow().quiet("stdout").postProcess((afterThen)=>{
-    return afterThen.stdout.replace(/\r?\n$/, "")
-})
+# const $$ = (...args)=>dax(...args).noThrow().quiet("stdout")
+# .postProcess((afterThen)=>{
+#     return afterThen.stdout.replace(/\r?\n$/, "")
+# })
 
 
 // try to install zellij if needed
@@ -25,7 +26,7 @@ if (!await hasCommand(`zellij`)) {
 
 FileSystem.cwd = projectRoot
 await $`zellij kill-all-sessions`
-await $`zellij delete-all-sessions <<< "y\n"`
+await $`zellij delete-all-sessions`.stdin("y\n")
 const process = $`zellij --session survivor_main`.spawn()
 await new Promise(r=>setTimeout(r,300))
 await $`zellij --session survivor_main action write-chars ${`sleep 5\nrun/4_python\n`}`
