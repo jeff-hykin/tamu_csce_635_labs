@@ -20,7 +20,7 @@ This is code for the survivor buddy lab assignment.
     - Make and demo some actions to me
 - Week 3 Tasks: Multi behavior
     - [Instructions](https://github.com/jeff-hykin/tamu_csce_635_labs/blob/master/lab1/instructions/week3.md)
-    - Demo actually making some coehsive behavior on physical bot
+    - Demo actually making some coehsive behavior
 - Week 4 Tasks: Face detection
     - [Instructions](https://github.com/jeff-hykin/tamu_csce_635_labs/blob/master/lab1/instructions/week4.md)
     - Demo a decently working system with face detection on a physical bot
