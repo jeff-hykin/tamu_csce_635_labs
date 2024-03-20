@@ -7,14 +7,14 @@ In person by Fri March 1st
 ## What needs to be done
 
 - Run the `run/check` command
-- Getting the code running on the physical bot may be a requirement; check in on this the week of the lab. (run `run/pull_changes` to update/refresh the instructions)
 - Be ready to demonstrate any of the behaviors on on rviz
-- Be ready to show code / code structure
 - Alternatively, submit a screen recording that
     - shows the code structure (e.g. parameters/schema)
     - demo **all** of the behaviors in Rviz
 
 ## Tasks
+
+- NOTE: its okay to NOT follow schemas. These tasks kind of show how the nice schema approach isn't always completely practical
 
 - create two more actions (also involving >=2 degrees of freedom):
     1. fearful
