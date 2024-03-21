@@ -200,8 +200,7 @@ class Robot:
                         )
             ''')
         
-        joint_goals = JointPositions(joint_goals.as_list)
-        torso_change = Robot.previous_joint_positions.torso_joint - joint_goals.torso_joint
+        Robot.previous_joint_positions = joint_goals = JointPositions(joint_goals.as_list)
         
         if not config.send_to_rviz:
             send_to_survivor_bud(joint_goals)
