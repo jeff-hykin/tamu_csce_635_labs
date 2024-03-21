@@ -65,11 +65,17 @@ class SurvivorBuddySerial:
         linux_default_address="/dev/ttyUSB0",
         mac_default_address=None, # mac auto-detects name
         inital_positions=[90,90,90,90],
+        hardware_offset_compensation=[-15, -15, -12, -35],
         logging=False,
         include_legacy_survivor_buddy_support=True,
     ):
         import threading
         import serial
+        
+        self.hardware_offset_compensation = hardware_offset_compensation
+        for index,offset in enumerate(hardware_offset_compensation):
+            inital_positions[index] += hardware_offset_compensation
+        
         connection_path = ""
         if port_address != None:
             connection_path = port_address
@@ -158,10 +164,10 @@ class SurvivorBuddySerial:
         # NOTE: survivor buddy can actually move a bit faster than speed 1, but it very very very much risks damage to the parts from whiplash
         assert speed <= 100 and speed >= 0.1, "Speed of an action must be in the range 0.1 to 100" 
         # compensation for hardware 0,0,0,0 not being calibrated
-        torso_pitch += -15
-        torso_yaw   += -15
-        head_roll   += -12
-        head_pitch  += -35
+        torso_pitch += self.hardware_offset_compensation[0]
+        torso_yaw   += self.hardware_offset_compensation[1]
+        head_roll   += self.hardware_offset_compensation[2]
+        head_pitch  += self.hardware_offset_compensation[3]
         assert torso_pitch >= SurvivorBuddySerial.torso_pitch_min and torso_pitch <= SurvivorBuddySerial.torso_pitch_max 
         assert torso_yaw   >= SurvivorBuddySerial.torso_yaw_min   and torso_yaw   <= SurvivorBuddySerial.torso_yaw_max   
         assert head_roll   >= SurvivorBuddySerial.head_roll_min  and head_roll  <= SurvivorBuddySerial.head_roll_max  
