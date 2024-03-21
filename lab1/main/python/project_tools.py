@@ -97,7 +97,7 @@ fake_noise_helper.action_duration = 0
 fake_noise_helper.just_sent_clap = False
 fake_noise_helper.prev_mode = None
 audio_chunk_size = 2048
-def generate_fake_continous_noise(delay=5, duration=4, noise_volume=1, spike_index=124, should_clap=False, interrupt_after_clap_lag=0.5):
+def generate_fake_continous_noise(delay=5, duration=4, noise_volume=1, spike_index=124, should_clap=False, interrupt_after_clap_lag=0.5, print=print):
     """
         generate_fake_continous_noise(
             delay=5, # means startup delay of 5 seconds
@@ -105,6 +105,7 @@ def generate_fake_continous_noise(delay=5, duration=4, noise_volume=1, spike_ind
             noise_volume=1, # means the values in the array will be 1
         )
     """
+    if not print: print = lambda *args: each
     import numpy
     output = numpy.zeros(audio_chunk_size)
     assert interrupt_after_clap_lag < duration/2, "The interrupt needs to be within the duration of the clap"
