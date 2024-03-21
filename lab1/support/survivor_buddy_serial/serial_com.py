@@ -157,6 +157,11 @@ class SurvivorBuddySerial:
         """
         # NOTE: survivor buddy can actually move a bit faster than speed 1, but it very very very much risks damage to the parts from whiplash
         assert speed <= 100 and speed >= 0.1, "Speed of an action must be in the range 0.1 to 100" 
+        # compensation for hardware 0,0,0,0 not being calibrated
+        torso_pitch += -15
+        torso_yaw   += -15
+        head_roll   += -12
+        head_pitch  += -35
         assert torso_pitch >= SurvivorBuddySerial.torso_pitch_min and torso_pitch <= SurvivorBuddySerial.torso_pitch_max 
         assert torso_yaw   >= SurvivorBuddySerial.torso_yaw_min   and torso_yaw   <= SurvivorBuddySerial.torso_yaw_max   
         assert head_roll   >= SurvivorBuddySerial.head_roll_min  and head_roll  <= SurvivorBuddySerial.head_roll_max  
