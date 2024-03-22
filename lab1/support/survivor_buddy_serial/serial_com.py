@@ -74,7 +74,7 @@ class SurvivorBuddySerial:
         
         self.hardware_offset_compensation = hardware_offset_compensation
         for index,offset in enumerate(hardware_offset_compensation):
-            inital_positions[index] += hardware_offset_compensation
+            inital_positions[index] += offset
         
         connection_path = ""
         if port_address != None:
