@@ -201,10 +201,9 @@ class Robot:
                         )
             ''')
         
-        Robot.previous_joint_positions = joint_goals = JointPositions(joint_goals.as_list)
-        
         if not config.send_to_rviz:
             send_to_survivor_bud(joint_goals, speed=30)
+            Robot.previous_joint_positions = joint_goals = JointPositions(joint_goals.as_list)
             if 0:
                 Robot.twist_obj.twist.linear.x  = -joint_goals.torso_joint
                 Robot.twist_obj.twist.linear.y  = -joint_goals.neck_swivel
