@@ -13,7 +13,6 @@ import numbers
 # packages
 import cv2
 import geometry_msgs.msg
-import moveit_commander
 import numpy
 import numpy as np
 import rospy
@@ -249,5 +248,7 @@ if True:
 
 # Starting point of everything
 Robot.setup_all_the_boring_boilerplate_stuff()
-moveit_commander.roscpp_initialize([])
+if config.send_to_rviz:
+    import moveit_commander
+    moveit_commander.roscpp_initialize([])
 rospy.spin()
