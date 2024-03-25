@@ -52,6 +52,7 @@ class Robot:
     
     def when_audio_chunk_received(chunk):
         data = numpy.array(chunk.data)
+        import code; code.interact(banner='',local={**globals(),**locals()})
         print(f'''Audio data chunk shape is: {data.shape}''')
         # NOTE: Units are unknown (try plotting the data)
         
@@ -145,6 +146,7 @@ class Robot:
             head_nod=0, # degrees not radians
         )
         if config.send_to_rviz:
+            import moveit_commander
             Robot.robot = moveit_commander.RobotCommander()
             Robot.scene = moveit_commander.PlanningSceneInterface()
 
