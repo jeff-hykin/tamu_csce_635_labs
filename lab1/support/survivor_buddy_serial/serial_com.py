@@ -112,7 +112,13 @@ class SurvivorBuddySerial:
             (initial_delay_time, inital_positions)
         ]
         
-        self.connection = serial.Serial(connection_path, baud_rate)
+        try:
+            self.connection = serial.Serial(connection_path, baud_rate)
+        except serial.serialutil.SerialException as error:
+            import subprocess
+            print(f'''trying to give self access to the serial port since I got an error: {error}''')
+            subprocess.check_output(['sudo', 'chmod', '777', connection_path ]).decode('utf-8')[0:-1]
+            self.connection = serial.Serial(connection_path, baud_rate)
         
         # thread is only needed for move_joint_slowly (otherwise the sleep() in the thread would slow everything else down)
         self.still_running = True
