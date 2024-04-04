@@ -61,13 +61,3 @@ Stage 2: computer controls
 4. Disconnect the tablet from spot
 5. Connect your computer to the spot wifi
 6. Run hello_spot.py
-
-Lab 2
-- have them look at the code
-    - where are the class concepts
-    - what is it using for gaits
-    - what system architecture 
-    - if we make X a higher number what is it going to do
-    - if you wanted to change 
-    - demo the correct answer
-- propose changes 
